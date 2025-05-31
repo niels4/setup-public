@@ -1,0 +1,5 @@
+brew "coreutils"
+brew "fd"
+brew "jq"
+brew "tree"
+brew "zoxide"

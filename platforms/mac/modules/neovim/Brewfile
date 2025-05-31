@@ -1,0 +1,4 @@
+brew "neovim"
+brew "stylua"
+brew "tree-sitter-cli"
+brew "unzip"
