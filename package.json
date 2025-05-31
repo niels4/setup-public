@@ -1,0 +1,22 @@
+{
+  "name": "setup",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Setup and synchronize your dev environments on different platforms",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/niels4/setup.git"
+  },
+  "author": "Niels Nielsen",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^11.3.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.15.29"
+  }
+}
