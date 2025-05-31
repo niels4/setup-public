@@ -1,15 +1,35 @@
 import fs from "fs-extra"
 import { spawn } from "node:child_process"
+import { randomBytes } from "node:crypto"
+import { type Stream } from "node:stream"
+import { promisify } from "node:util"
 import { zshenv } from "./constants.ts"
+
+const randomBytesAsync = promisify(randomBytes)
 
 export const escapeDoubleQuotes = (str: string) => str.replace(/"/g, `\\"`)
 export const escapeDollarSigns = (str: string) => str.replace(/\$/g, `\\$`)
 
-export const cmd = async (cmdStr: string): Promise<string> => {
+const handleInputs = (stdin: Stream.Writable, inputs?: string[]) => {
+  if (!inputs || inputs.length === 0) {
+    return
+  }
+  inputs.forEach((input) => {
+    stdin.write(input)
+  })
+  stdin.end()
+}
+
+type CmdOptions = {
+  inputs?: string[]
+}
+
+export const cmd = async (cmdStr: string, options?: CmdOptions): Promise<string> => {
   cmdStr = `source ${zshenv}; ${cmdStr}`
   const cp = spawn(cmdStr, { shell: true })
   cp.stdout.pipe(process.stdout)
   cp.stderr.pipe(process.stderr)
+  handleInputs(cp.stdin, options?.inputs)
 
   let result = ""
 
@@ -48,4 +68,9 @@ export const addLineToZshenv = async (line: string) => {
     const escapedLine = escapeDoubleQuotes(escapeDollarSigns(line))
     await cmd(`echo "${escapedLine}" >> ${zshenv}`)
   }
+}
+
+export const randomHexString = async (byteLength: number) => {
+  const bytes = await randomBytesAsync(byteLength)
+  return bytes.toString("hex")
 }
