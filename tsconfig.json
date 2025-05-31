@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "./platforms/",
+    "noEmit": true,
+    "module": "nodenext",
+    "allowImportingTsExtensions": true
+  }
+}

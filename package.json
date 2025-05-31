@@ -2,9 +2,11 @@
   "name": "setup",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Setup and synchronize your dev environments on different platforms",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "typecheck": "npx tsc",
+    "test": "npm run typecheck"
   },
   "repository": {
     "type": "git",
