@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { join } from "node:path"
-import { bold, checkmark, green, red, reset, setupEnvVar, setupRoot } from "./constants.ts"
+import { bold, checkmark, green, platformsDir, red, reset, setupEnvVar } from "./constants.ts"
 
 const getImportPath = (platform: string, moduleName: string) =>
-  join(setupRoot, "platforms", platform, "modules", moduleName, "setup.ts")
+  join(platformsDir, platform, "modules", moduleName, "setup.ts")
 
 export type SupportedPlatform = "arch" | "mac"
 

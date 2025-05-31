@@ -3,8 +3,9 @@ import { join } from "node:path"
 
 export const setupEnvVar = "SETUP_ENV"
 
-const sharedDir = import.meta.dirname
-export const setupRoot = join(sharedDir, "..", "..")
+export const sharedDir = import.meta.dirname
+export const platformsDir = join(sharedDir, "..")
+export const setupRoot = join(platformsDir, "..")
 
 export const host = hostname()
 export const { homedir, username } = userInfo()
