@@ -3,7 +3,7 @@ import { type DevEnvironments, runSetup } from "#shared/runner.ts"
 const platform = "arch"
 
 const devEnvironments: DevEnvironments = {
-  default: ["prereqs", "ssh", "shell"],
+  default: ["prereqs", "ssh", "shell", "shell-tools", "docs"],
 }
 
 await runSetup({ platform, devEnvironments })
