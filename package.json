@@ -5,8 +5,10 @@
   "type": "module",
   "description": "Setup and synchronize your dev environments on different platforms",
   "scripts": {
+    "format": "prettier ./platforms --write",
     "typecheck": "npx tsc",
-    "test": "npm run typecheck"
+    "lint": "eslint ./platforms",
+    "test": "npm run lint && npm run typecheck"
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,13 @@
     "fs-extra": "^11.3.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.28.0",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^22.15.29"
+    "@types/node": "^22.15.29",
+    "eslint": "^9.28.0",
+    "globals": "^16.2.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "typescript-eslint": "^8.33.0"
   }
 }
