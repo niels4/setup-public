@@ -1,0 +1,27 @@
+#!/bin/sh
+
+session=$1
+
+tmux has-session -t $session
+
+if [ $? == 0 ]; then
+  echo "reattaching to ${session}"
+  tmux attach -t $session
+  exit 0
+fi
+
+echo "starting ${session}"
+
+tmux new-session -d -s $session -n "editor"
+tmux new-window -t $session -n "shell"
+tmux new-window -t $session -n "repl"
+tmux new-window -t $session -n "server"
+
+editor="${session}:1.1"
+shell="${session}:2.1"
+server="${session}:4.1"
+
+tmux send-keys -t $editor "nvim" C-m
+
+tmux select-window -t "${session}:1"
+tmux attach-session -t $session

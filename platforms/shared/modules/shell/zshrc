@@ -1,0 +1,132 @@
+source "${ZINIT_HOME}/zinit.zsh"
+
+ZSH_THEME="kphoen"
+zstyle ':omz:alpha:lib:git' async-prompt no
+
+export EDITOR=nvim
+
+## Zinit Setting
+# Must Load OMZ Git library
+zinit snippet OMZL::git.zsh
+
+# Load Git plugin from OMZ
+zinit snippet OMZP::git
+zinit cdclear -q # <- forget completions provided up to this moment
+
+# use oh-my-zsh kphoen theme
+setopt promptsubst
+zinit snippet OMZT::kphoen
+
+# shell integrations
+eval "$(fzf --zsh)"
+
+# add plugins
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+#zinit light Aloxaf/fzf-tab
+zinit snippet OMZP::sudo
+zinit snippet OMZP::archlinux
+zinit snippet OMZP::aws
+zinit snippet OMZP::kubectl
+zinit snippet OMZP::kubectx
+zinit snippet OMZP::command-not-found
+
+# Load completions
+autoload -Uz compinit && compinit
+
+zinit cdreplay -q
+
+# history
+HISTSIZE=10000
+HISTFILE="${ZDOTDIR}/.zsh_history"
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+setopt auto_cd
+
+# completion styling
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}' "ma=48;5;244;1"
+zstyle ':completion:*' menu yes select
+
+# better man page and documentation
+export MANPAGER='nvim +Man!'
+
+# aliases and functions
+alias sourcerc='source ${ZDOTDIR}/.zshrc'
+alias ls='ls --color'
+alias l='ls -lah'
+alias setup="~/s/setup.sh; source ~/.zshenv; source ${ZDOTDIR}/.zshrc"
+alias setup-node="SETUP_ENV=node_only setup"
+alias webdev="~/s/webdev"
+alias shelldev="~/s/shelldev"
+
+# keybindings
+bindkey -v
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+bindkey '^y' autosuggest-accept
+
+clean-nvim-data() {
+  rm -rf ~/.local/share/nvim
+  rm -rf ~/.local/state/nvim
+  rm ~/setup/all/neovim/nvim/lazy-lock.json
+}
+
+# for keyring
+export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gcr/ssh
+
+red="\e[31m"
+green="\e[32m"
+bold="\e[1m"
+reset="\e[0m"
+checkmark="✓"
+cross="✗"
+
+unlock-keyring() {
+  eval $(read -rs "pass?Password: "; echo -n "$pass" | gnome-keyring-daemon -r --unlock)
+  secret-tool lookup ssh passphrase > /dev/null
+  if [[ $? -ne 0 ]]; then
+    echo -e "${red}${bold}Failed to unlock keyring!${reset}"
+    return 1
+  fi
+  echo -e "${red}${bold}**********${cross}${cross}${cross}${cross}${cross} Keyring Unlocked! ${cross}${cross}${cross}${cross}${cross}**********${reset}"
+}
+
+lock-keyring() {
+  dbus-send --session --dest=org.freedesktop.secrets \
+    --type=method_call  \
+    /org/freedesktop/secrets \
+    org.freedesktop.Secret.Service.Lock \
+    array:objpath:/org/freedesktop/secrets/collection/login
+  echo -e "${green}${bold}${checkmar} Keyring locked ${checkmark}${reset}"
+}
+
+unlock-ssh() {
+  if [[ ! -e "${HOME}/.ssh/id_mykey" ]]; then
+    echo "${red}${bold}SSH Key does not exist!${reset}"
+    return 1
+  fi
+
+  unlock-keyring
+
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+
+  expect << EOF
+  set timeout -1
+  spawn ssh-add ${HOME}/.ssh/id_mykey
+  expect "Enter passphrase*:"
+  send -- "$(secret-tool lookup ssh passphrase)\r"
+  expect eof
+EOF
+  lock-keyring
+}
