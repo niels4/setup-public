@@ -10,12 +10,11 @@
     "lint": "eslint ./platforms",
     "test": "npm run lint && npm run typecheck"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/niels4/setup.git"
+  "imports": {
+    "#shared/*": "./platforms/shared/*",
+    "#arch/*": "./platforms/arch/*",
+    "#mac/*": "./platforms/mac/*"
   },
-  "author": "Niels Nielsen",
-  "license": "MIT",
   "dependencies": {
     "fs-extra": "^11.3.0"
   },
@@ -28,5 +27,11 @@
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript-eslint": "^8.33.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/niels4/setup.git"
+  },
+  "author": "Niels Nielsen",
+  "license": "MIT"
 }
