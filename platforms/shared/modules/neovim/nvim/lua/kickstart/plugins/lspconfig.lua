@@ -221,6 +221,11 @@ return {
         -- ts_ls = {},
         --
 
+        -- custom: Enable my lsp configs
+        eslint = {},
+        jsonls = {},
+        ts_ls = {},
+
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
