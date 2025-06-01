@@ -8,12 +8,12 @@ import { read } from "read"
 const generatePassphrase = () => randomHexString(50)
 
 const keyName = "id_mykey"
-const dir = import.meta.dirname
+const __dirname = import.meta.dirname
 const sshDir = join(homedir, ".ssh")
 const keyFile = join(sshDir, keyName)
 
 const sshConfigLink = {
-  src: join(dir, "config"),
+  src: join(__dirname, "config"),
   dst: join(sshDir, "config"),
 }
 

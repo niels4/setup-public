@@ -3,22 +3,22 @@ import { cmd, replaceFileWithLink } from "#shared/util.ts"
 import fs from "fs-extra"
 import { join } from "node:path"
 
-const dir = import.meta.dirname
+const __dirname = import.meta.dirname
 
 const zinitHome = process.env["ZINIT_HOME"]!
 
 const tmuxConfigLink = {
-  src: join(dir, "tmux.conf"),
+  src: join(__dirname, "tmux.conf"),
   dst: join(configHome, "tmux", "tmux.conf"),
 }
 
 const zshrcLink = {
-  src: join(dir, "zshrc"),
+  src: join(__dirname, "zshrc"),
   dst: join(zdotDir, ".zshrc"),
 }
 
 const scriptsDirLink = {
-  src: join(dir, "scripts"),
+  src: join(__dirname, "scripts"),
   dst: join(homedir, "s"),
 }
 
