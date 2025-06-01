@@ -60,7 +60,7 @@ zstyle ':completion:*' menu yes select
 export MANPAGER='nvim +Man!'
 
 # aliases and functions
-alias sourcerc='source ${ZDOTDIR}/.zshrc'
+alias sourcerc='source $HOME/.zshenv;source ${ZDOTDIR}/.zshrc'
 alias ls='ls --color'
 alias l='ls -lah'
 alias setup="~/s/setup.sh; source ~/.zshenv; source ${ZDOTDIR}/.zshrc"
