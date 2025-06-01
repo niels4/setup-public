@@ -11,7 +11,7 @@ const zinitHomeVar = `export ZINIT_HOME="${zinitHome}"`
 
 const tmuxConfigLink = {
   src: join(dir, "tmux.conf"),
-  dst: join(homedir, ".tmux.conf"),
+  dst: join(configHome, "tmux", "tmux.conf"),
 }
 
 const zshrcLink = {
