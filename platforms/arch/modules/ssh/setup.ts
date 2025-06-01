@@ -1,6 +1,6 @@
 import { pacman, saveKeyringValue } from "#arch/arch-util.ts"
 import { bold, homedir, host, red, reset, username } from "#shared/constants.ts"
-import { cmd, randomHexString, replaceFileWithLink } from "#shared/util.ts"
+import { addLineToZshenv, cmd, randomHexString, replaceFileWithLink } from "#shared/util.ts"
 import fs from "fs-extra"
 import { join } from "node:path"
 import { read } from "read"
@@ -41,6 +41,7 @@ const createSshKey = async () => {
 }
 
 export default async function setup() {
+  await addLineToZshenv("export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gcr/ssh")
   await pacman("gnome-keyring libsecret")
 
   await cmd("systemctl --user enable --now gcr-ssh-agent.socket")

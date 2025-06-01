@@ -3,8 +3,6 @@ source "${ZINIT_HOME}/zinit.zsh"
 ZSH_THEME="kphoen"
 zstyle ':omz:alpha:lib:git' async-prompt no
 
-export EDITOR=nvim
-
 ## Zinit Setting
 # Must Load OMZ Git library
 zinit snippet OMZL::git.zsh
@@ -56,17 +54,18 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}' "ma=48;5;244;1"
 zstyle ':completion:*' menu yes select
 
-# better man page and documentation
-export MANPAGER='nvim +Man!'
-
-# aliases and functions
-alias sourcerc='source $HOME/.zshenv;source ${ZDOTDIR}/.zshrc'
-alias ls='ls --color'
-alias l='ls -lah'
-alias setup="~/s/setup.sh; source ~/.zshenv; source ${ZDOTDIR}/.zshrc"
+#reload zsh
+alias rzsh='source $HOME/.zshenv;source ${ZDOTDIR}/.zshrc'
+# run setup
+alias setup="~/s/setup.sh; rzsh"
+# install global node modules only
 alias setup-node="SETUP_ENV=node_only setup"
+# tmux shortcuts
 alias webdev="~/s/webdev"
 alias shelldev="~/s/shelldev"
+# other aliases
+alias ls='ls --color'
+alias l='ls -lah'
 
 # keybindings
 bindkey -v
@@ -74,14 +73,12 @@ bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^y' autosuggest-accept
 
+# functions
 clean-nvim-data() {
   rm -rf ~/.local/share/nvim
   rm -rf ~/.local/state/nvim
-  rm ~/setup/all/neovim/nvim/lazy-lock.json
+  rm ~/.config/nvim/lazy-lock.json
 }
-
-# for keyring
-export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gcr/ssh
 
 red="\e[31m"
 green="\e[32m"
