@@ -1,4 +1,4 @@
 brew "neovim"
 brew "stylua"
-brew "tree-sitter-cli"
+brew "tree-sitter"
 brew "unzip"
