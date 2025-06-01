@@ -97,6 +97,7 @@ unlock-keyring() {
   echo -e "${red}${bold}**********${cross}${cross}${cross}${cross}${cross} Keyring Unlocked! ${cross}${cross}${cross}${cross}${cross}**********${reset}"
 }
 
+# lock keyring as described: https://wiki.archlinux.org/title/GNOME/Keyring#Locking_a_keyring
 lock-keyring() {
   dbus-send --session --dest=org.freedesktop.secrets \
     --type=method_call  \
