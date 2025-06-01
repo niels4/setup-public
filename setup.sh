@@ -2,6 +2,8 @@
 
 setup_dir=$(dirname "$(realpath "$0")")
 
+source "${setup_dir}/platforms/shared/base-vars.sh"
+
 echo "SETUP DIR: ${setup_dir}"
 
 if [ "$(uname)" = "Darwin" ]; then
