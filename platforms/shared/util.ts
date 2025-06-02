@@ -48,9 +48,18 @@ export const cmd = async (cmdStr: string, options?: CmdOptions): Promise<string>
   })
 }
 
-export const replaceFileWithLink = async ({ src, dst }: { src: string; dst: string }) => {
+type FileLink = {
+  src: string
+  dst: string
+}
+
+export const replaceFileWithLink = async ({ src, dst }: FileLink) => {
   await fs.remove(dst)
   await fs.ensureSymlink(src, dst)
+}
+
+export const replaceFile = async ({ src, dst }: FileLink) => {
+  await fs.copy(src, dst)
 }
 
 export const fileContainsText = async (file: string, text: string) => {
