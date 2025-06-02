@@ -15,7 +15,12 @@ zinit cdclear -q # <- forget completions provided up to this moment
 setopt promptsubst
 zinit snippet OMZT::kphoen
 
-# shell integrations
+# fzf
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+export FZF_TMUX_OPTS=" -p90%,70% "
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always -n --line-range :500 {}'"
 eval "$(fzf --zsh)"
 
 # add plugins
@@ -54,8 +59,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}' "ma=48;5;244;1"
 zstyle ':completion:*' menu yes select
 
-#reload zsh
-alias rzsh='source $HOME/.zshenv;source ${ZDOTDIR}/.zshrc'
 # run setup
 alias setup="~/s/setup.sh; rzsh"
 # install global node modules only
@@ -65,9 +68,15 @@ alias print-gist="~/s/print-gist.sh"
 # tmux shortcuts
 alias webdev="~/s/webdev"
 alias shelldev="~/s/shelldev"
+# quickly edit and source zsh config
+alias ezsh="nvim ~/.zshrc"
+alias rzsh="killall -USR1 zsh"
 # other aliases
 alias ls='ls --color'
 alias l='ls -lah'
+
+# zoxide, replace cd command
+eval "$(zoxide init zsh --cmd cd)"
 
 # keybindings
 bindkey -v
@@ -129,4 +138,12 @@ unlock-ssh() {
   expect eof
 EOF
   lock-keyring
+}
+
+# trap to reload all zsh instances
+TRAPUSR1() {
+  if [[ -o INTERACTIVE ]]; then
+     {echo; echo "execute a new shell instance" } 1>&2
+     exec "${SHELL}"
+  fi
 }
