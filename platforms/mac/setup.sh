@@ -39,16 +39,18 @@ EOF
   echo "Homebrew installed, run brew doctor to verify"
 fi
 
-# install homebrew and latest version of nodes
+# add homebrew to the path
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# install latest version of nodejs
 brew install fnm
 eval "$(fnm env --use-on-cd)"
 fnm install --latest
 fnm default latest
 
-# run setup script
 pushd ${setup_dir}
 
+# run setup script
 npm install
 node setup.ts
 
