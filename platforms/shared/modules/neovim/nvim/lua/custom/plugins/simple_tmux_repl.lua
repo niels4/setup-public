@@ -6,9 +6,9 @@ return {
     local tmux_repl = require 'simple_tmux_repl'
     tmux_repl.setup()
 
-    local join = function(tmux_window, is_vertertical)
+    local join = function(target_window, is_vertertical)
       return function()
-        tmux_repl.join_pane(tmux_window, is_vertertical)
+        tmux_repl.join_pane(target_window, is_vertertical)
       end
     end
 
@@ -17,5 +17,13 @@ return {
     vim.keymap.set('n', '<S-f2>', join('shell', false))
     vim.keymap.set('n', '<f3>', join('repl', true))
     vim.keymap.set('n', '<S-f3>', join('repl', false))
+
+    local send = function(target_window, text)
+      return function()
+        tmux_repl.send_text(target_window, text)
+      end
+    end
+
+    vim.keymap.set('n', ',r', send('shell', 'l ~'))
   end,
 }

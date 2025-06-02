@@ -14,4 +14,6 @@ M.join_pane_horizontal = tmux.join_pane_horizontal
 
 M.break_pane = tmux.break_pane
 
+M.send_text = tmux.send_text
+
 return M
