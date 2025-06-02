@@ -25,6 +25,7 @@ spawn ssh-add --apple-use-keychain ${keyFile}
 expect "Enter passphrase"
 send -- "${passphrase}\r"
 `
+  // NOTE: Your computer cannot be locked while this script is running or the passphrase won't get saved into the keychain
   await runExpect(sshAddScript, { prepend: 'eval "$(ssh-agent -s)";' })
 }
 
