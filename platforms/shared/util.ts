@@ -74,3 +74,11 @@ export const randomHexString = async (byteLength: number) => {
   const bytes = await randomBytesAsync(byteLength)
   return bytes.toString("hex")
 }
+
+const expectSettings = `
+set timeout -1
+match_max 100000
+`
+
+export const runExpect = async (expectScript: string) =>
+  cmd("expect", { inputs: [expectSettings, expectScript, "\n", "expect eof"] })
