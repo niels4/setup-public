@@ -80,5 +80,9 @@ set timeout -1
 match_max 100000
 `
 
-export const runExpect = async (expectScript: string) =>
-  cmd("expect", { inputs: [expectSettings, expectScript, "\n", "expect eof"] })
+// use prepend to assign any variables before running expect command
+export const runExpect = async (expectScript: string, options?: { prepend: string }) => {
+  const prepend = options?.prepend ?? ""
+  const command = `${prepend} expect`
+  cmd(command, { inputs: [expectSettings, expectScript, "\n", "expect eof"] })
+}

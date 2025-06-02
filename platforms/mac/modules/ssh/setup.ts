@@ -21,11 +21,11 @@ const createSshKey = async () => {
   await cmd(`ssh-keygen -t ed25519 -C "${username}@${host}" -N ${passphrase} -f ${keyFile}`)
 
   const sshAddScript = `
-spawn eval "$(ssh-agent -s)" && ssh-add --apple-use-keychain ${keyFile}
+spawn ssh-add --apple-use-keychain ${keyFile}
 expect "Enter passphrase"
 send -- "${passphrase}\r"
 `
-  await runExpect(sshAddScript)
+  await runExpect(sshAddScript, { prepend: 'eval "$(ssh-agent -s)";' })
 }
 
 export default async function setup() {
