@@ -18,12 +18,12 @@ return {
     vim.keymap.set('n', '<f3>', join('repl', true))
     vim.keymap.set('n', '<S-f3>', join('repl', false))
 
-    local send = function(target_window, text)
+    local send_selected = function(target_window)
       return function()
-        tmux_repl.send_text(target_window, text)
+        tmux_repl.send_selected(target_window)
       end
     end
 
-    vim.keymap.set('n', ',r', send('shell', 'l ~'))
+    vim.keymap.set('v', ',r', send_selected 'shell')
   end,
 }

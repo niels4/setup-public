@@ -1,6 +1,6 @@
-local shell = function(cmd)
-  return vim.fn.trim(vim.fn.system(cmd))
-end
+local util = require 'simple_tmux_repl.util'
+local shell = util.shell
+local escape_shell_chars = util.escape_shell_chars
 
 local current_tmux_session = shell "tmux display-message -p '#S'"
 local current_activity_option = shell 'tmux show-options visual-activity'
@@ -36,16 +36,10 @@ local break_pane = function(target_window)
   shell('tmux set-option ' .. current_activity_option)
 end
 
-local function escape_shell_chars(str)
-  --stylua: ignore
-  return (str
-    :gsub('\\', '\\\\')
-    :gsub('"', '\\"')
-    :gsub('`', '\\`')
-    :gsub('%$', '\\$'))
-end
-
 local send_text = function(target, text)
+  if #text == 0 then
+    return
+  end
   local escapedText = escape_shell_chars(text)
   local cmd = 'tmux send-keys -t ' .. target .. ' "' .. escapedText .. '" C-m'
   shell(cmd)
