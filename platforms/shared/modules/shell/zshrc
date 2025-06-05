@@ -60,6 +60,8 @@ alias rzsh='source $HOME/.zshenv;source ${ZDOTDIR}/.zshrc'
 alias setup="~/s/setup.sh; rzsh"
 # install global node modules only
 alias setup-node="SETUP_ENV=node_only setup"
+# print gist by name
+alias print-gist="~/s/print-gist.sh"
 # tmux shortcuts
 alias webdev="~/s/webdev"
 alias shelldev="~/s/shelldev"
