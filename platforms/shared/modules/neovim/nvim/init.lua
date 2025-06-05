@@ -93,16 +93,19 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
+-- [[ custom: add some global functions for developing and debugging neovim plugins ]]
+require 'custom.globals'
+
 -- [[ Setting options ]]
 require 'options'
 
--- [[ Override with custom options ]]
+-- [[ custom: Override with custom options ]]
 require 'custom.options'
 
 -- [[ Basic Keymaps ]]
 require 'keymaps'
 --
--- [[ Override with custom keymaps ]]
+-- [[ custom: Override with custom keymaps ]]
 require 'custom.keymaps'
 
 -- [[ Install `lazy.nvim` plugin manager ]]

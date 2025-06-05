@@ -1,0 +1,53 @@
+snippet boiler "boiler plate"
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>$1</title>
+			<link rel="stylesheet" href="index.css">
+			<script type="module" src="./index.js"></script>
+		</head>
+		<body>
+			<!-- page content -->
+		</body>
+	</html>
+
+snippet boiler2 "boiler plate with app_root div"
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>$1</title>
+			<link rel="stylesheet" href="index.css">
+			<script type="module" src="./index.js" defer></script>
+		</head>
+		<body>
+			<div id="app_root"></div>
+		</body>
+	</html>
+
+snippet linktag "stylesheet link"
+	<link rel="stylesheet" href="$1">$0
+
+snippet scripttag "javascript script tag"
+	<script type="module" src="$1" defer></script>$0
+
+snippet svgtag "SVG tag"
+	<svg viewBox="0 0 ${1:100} $1" xmlns="http://www.w3.org/2000/svg">
+		$0
+	</svg>
+
+
+snippet t "tag"
+	<${1:div}$2>$0</$1>
+
+snippet ct "closed tag"
+	<${1:div} $0 />
+
+snippet cn "class"
+	class="${1:class}"$0
+
+snippet pr "property"
+	${1:prop}="${2:val}"$0

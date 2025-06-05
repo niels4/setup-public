@@ -48,9 +48,8 @@ local options = {
 }
 
 for k, v in pairs(options) do
-  vim.opt[k] = v
+  vim.o[k] = v
 end
 
-vim.g.slime_target = 'tmux'
 vim.g.loaded_netrw = 1 -- disable netrw in favor of nvim-tree
 vim.g.loaded_netrwPlugin = 1

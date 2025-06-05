@@ -63,9 +63,6 @@ keymap('n', '<space>d', vim.diagnostic.open_float, desc 'Open floating [d]iagnos
 keymap('i', '<M-l>', '<right>', desc 'Move forward while in insert mode')
 keymap('i', '<M-h>', '<left>', desc 'Move backward while in insert mode')
 
--- eslint fix all
-vim.keymap.set({ 'n' }, '<space>ef', '<cmd>LspEslintFixAll<cr>', desc '[e]slint [f]ix All')
-
 -- edit snippets
 vim.keymap.set({ 'n' }, '<space>es', function()
   require('luasnip.loaders').edit_snippet_files {}

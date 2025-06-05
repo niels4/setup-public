@@ -1,0 +1,28 @@
+snippet irr "import react"
+	import React from 'react'
+
+snippet icn "import classnames"
+	import cn from 'classnames'
+
+snippet t "tag"
+	<${1:div}$2>$3</$1>$0
+
+snippet ct "closed tag"
+	<${1:div} $0 />
+
+snippet cn "className"
+	className={style.${1:class}}$0
+
+snippet cna "className class-names array"
+	className={cn([style.${1:class}])}$0
+
+snippet pr "property"
+	${1:prop}={${2:val}}$0
+
+snippet expr "expand props"
+	{...{${1:props}}}$0
+
+snippet svg "svg tag"
+	<svg viewBox={"0 0 100 100"} xmlns="http://www.w3.org/2000/svg">
+		$0
+	</svg>

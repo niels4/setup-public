@@ -28,7 +28,18 @@ return {
           --   end,
           -- },
         },
+        --[[ custom: use a config function instead of opts
         opts = {},
+        ]]
+        config = function()
+          local luasnip = require 'luasnip'
+
+          luasnip.config.setup {}
+          require('luasnip.loaders.from_snipmate').lazy_load()
+          luasnip.filetype_extend('javascriptreact', { 'javascript' })
+          luasnip.filetype_extend('typescript', { 'javascript' })
+          luasnip.filetype_extend('typescriptreact', { 'typescript', 'javascript', 'javascriptreact' })
+        end,
       },
       'folke/lazydev.nvim',
     },
@@ -59,6 +70,12 @@ return {
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'default',
 
+        -- custom: add snippet keymaps
+        ['<tab>'] = { 'accept', 'fallback' },
+        ['<cr>'] = { 'accept', 'fallback' },
+        ['<m-j>'] = { 'snippet_forward' },
+        ['<m-k>'] = { 'snippet_backward' },
+
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
       },
@@ -76,8 +93,12 @@ return {
       },
 
       sources = {
+        --[[ custom: add buffer and path sources
         default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        ]]
+        default = { 'lsp', 'path', 'lazydev', 'snippets', 'buffer', 'path' },
         providers = {
+          snippets = { min_keyword_length = 1 },
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
       },
@@ -91,10 +112,25 @@ return {
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
       -- See :h blink-cmp-config-fuzzy for more information
+      --[[ custom: use rust fuzzy sorter, lua matcher kept putting my snippets first on the list
       fuzzy = { implementation = 'lua' },
+      ]]
+      fuzzy = { implementation = 'rust' },
 
       -- Shows a signature help window while you type arguments for a function
+      --[[ custom: show signature as we type
       signature = { enabled = true },
+      ]]
+      signature = {
+        enabled = true,
+        trigger = {
+          enabled = true,
+          show_on_keyword = true,
+          show_on_trigger_character = true,
+          show_on_insert = true,
+          show_on_insert_on_trigger_character = true,
+        },
+      },
     },
   },
 }

@@ -35,11 +35,15 @@ require('lazy').setup({
 
   require 'kickstart/plugins/blink-cmp',
 
+  --[[ custom: using my own theme
   require 'kickstart/plugins/tokyonight',
+  ]]
 
   require 'kickstart/plugins/todo-comments',
 
+  --[[ custom using a different surround plugin. I'll install mini.ai standalone
   require 'kickstart/plugins/mini',
+  ]]
 
   require 'kickstart/plugins/treesitter',
 
@@ -63,12 +67,17 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   -- { import = 'custom.plugins' },
+  -- custom: import custom plugins
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
 }, {
+  -- custom: Disable change detection
+  change_detection = { enabled = false },
+
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
