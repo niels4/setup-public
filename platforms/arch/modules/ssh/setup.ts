@@ -1,5 +1,5 @@
 import { pacman, saveKeyringValue } from "#arch/arch-util.ts"
-import { bold, homedir, host, red, reset, username } from "#shared/constants.ts"
+import { bold, homedir, host, red, reset, username, zshAutorunDir } from "#shared/constants.ts"
 import { addLineToZshenv, cmd, randomHexString, replaceFileWithLink } from "#shared/util.ts"
 import fs from "fs-extra"
 import { join } from "node:path"
@@ -15,6 +15,11 @@ const keyFile = join(sshDir, keyName)
 const sshConfigLink = {
   src: join(__dirname, "config"),
   dst: join(sshDir, "config"),
+}
+
+const sshZshConfigLink = {
+  src: join(__dirname, "zshrc.d", "ssh.sh"),
+  dst: join(zshAutorunDir, "ssh.sh"),
 }
 
 const createSshKey = async () => {
@@ -46,7 +51,10 @@ export default async function setup() {
 
   await cmd("systemctl --user enable --now gcr-ssh-agent.socket")
 
+  await replaceFileWithLink(sshZshConfigLink)
   await replaceFileWithLink(sshConfigLink)
+  await cmd(`chmod 600 ${sshConfigLink.dst}`)
+  await fs.ensureDir(join(sshDir, "config.d"))
 
   const keyExists = await fs.pathExists(keyFile)
   if (!keyExists) {

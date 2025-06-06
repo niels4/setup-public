@@ -1,82 +1,31 @@
+# load zinit first
 source "${ZINIT_HOME}/zinit.zsh"
 
-ZSH_THEME="kphoen"
-zstyle ':omz:alpha:lib:git' async-prompt no
+# aliases
 
-## Zinit Setting
-# Must Load OMZ Git library
-zinit snippet OMZL::git.zsh
-
-# Load Git plugin from OMZ
-zinit snippet OMZP::git
-zinit cdclear -q # <- forget completions provided up to this moment
-
-# use oh-my-zsh kphoen theme
-setopt promptsubst
-zinit snippet OMZT::kphoen
-
-# fzf
-export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
-export FZF_TMUX_OPTS=" -p90%,70% "
-export FZF_CTRL_T_OPTS="--preview 'bat --color=always -n --line-range :500 {}'"
-eval "$(fzf --zsh)"
-
-# add plugins
-zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
-#zinit light Aloxaf/fzf-tab
-zinit snippet OMZP::sudo
-zinit snippet OMZP::archlinux
-zinit snippet OMZP::aws
-zinit snippet OMZP::kubectl
-zinit snippet OMZP::kubectx
-zinit snippet OMZP::command-not-found
-
-# Load completions
-autoload -Uz compinit && compinit
-
-zinit cdreplay -q
-
-# history
-HISTSIZE=10000
-HISTFILE="${ZDOTDIR}/.zsh_history"
-SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
-setopt hist_ignore_all_dups
-setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
-setopt auto_cd
-
-# completion styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}' "ma=48;5;244;1"
-zstyle ':completion:*' menu yes select
+# alias rzsh defined in ./autorun/reload_all_zsh.sh
 
 # run setup
 alias setup="~/s/setup.sh; rzsh"
-# install global node modules only
-alias setup-node="SETUP_ENV=node_only setup"
-# print gist by name
-alias print-gist="~/s/print-gist.sh"
+
 # tmux shortcuts
 alias webdev="~/s/webdev"
 alias shelldev="~/s/shelldev"
-# quickly edit and source zsh config
-alias ezsh="nvim ${ZDOTDIR}/.zshrc"
-alias rzsh="killall -USR1 zsh"
+
+# quickly edit zsh config
+alias ezsh="nvim $ZDOTDIR/.zshrc"
+
+# print gist by name
+# example: print-gist niels4 setup-public-github.sh
+alias print-gist="~/s/print-gist.sh"
+
+# eval gist by name
+# example: eval-gist niels4 setup-public-github.sh
+alias eval-gist="bash -c \"\$(~/s/print-gist.sh)\""
+
 # other aliases
 alias ls='ls --color'
 alias l='ls -lah'
-
-# zoxide, replace cd command
-eval "$(zoxide init zsh --cmd cd)"
 
 # keybindings
 bindkey -v
@@ -84,66 +33,7 @@ bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^y' autosuggest-accept
 
-# functions
-clean-nvim-data() {
-  rm -rf ~/.local/share/nvim
-  rm -rf ~/.local/state/nvim
-  rm ~/.config/nvim/lazy-lock.json
-}
-
-red="\e[31m"
-green="\e[32m"
-bold="\e[1m"
-reset="\e[0m"
-checkmark="✓"
-cross="✗"
-
-unlock-keyring() {
-  eval $(read -rs "pass?Password: "; echo -n "$pass" | gnome-keyring-daemon -r --unlock)
-  secret-tool lookup ssh passphrase > /dev/null
-  if [[ $? -ne 0 ]]; then
-    echo -e "${red}${bold}Failed to unlock keyring!${reset}"
-    return 1
-  fi
-  echo -e "${red}${bold}**********${cross}${cross}${cross}${cross}${cross} Keyring Unlocked! ${cross}${cross}${cross}${cross}${cross}**********${reset}"
-}
-
-# lock keyring as described: https://wiki.archlinux.org/title/GNOME/Keyring#Locking_a_keyring
-lock-keyring() {
-  dbus-send --session --dest=org.freedesktop.secrets \
-    --type=method_call  \
-    /org/freedesktop/secrets \
-    org.freedesktop.Secret.Service.Lock \
-    array:objpath:/org/freedesktop/secrets/collection/login
-  echo -e "${green}${bold}${checkmar} Keyring locked ${checkmark}${reset}"
-}
-
-unlock-ssh() {
-  if [[ ! -e "${HOME}/.ssh/id_mykey" ]]; then
-    echo "${red}${bold}SSH Key does not exist!${reset}"
-    return 1
-  fi
-
-  unlock-keyring
-
-  if [[ $? -ne 0 ]]; then
-    return 1
-  fi
-
-  expect << EOF
-  set timeout -1
-  spawn ssh-add ${HOME}/.ssh/id_mykey
-  expect "Enter passphrase*:"
-  send -- "$(secret-tool lookup ssh passphrase)\r"
-  expect eof
-EOF
-  lock-keyring
-}
-
-# trap to reload all zsh instances
-TRAPUSR1() {
-  if [[ -o INTERACTIVE ]]; then
-     {echo; echo "execute a new shell instance" } 1>&2
-     exec "${SHELL}"
-  fi
-}
+# source all files in autorun dir
+for file in ${ZDOTDIR}/zshrc.d/*.sh; do
+  source "$file"
+done

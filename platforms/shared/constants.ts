@@ -13,6 +13,7 @@ export const dataHome = join(homedir, ".local", "share")
 export const configHome = join(homedir, ".config")
 export const zshenv = join(homedir, ".zshenv")
 export const zdotDir = join(configHome, "zsh")
+export const zshAutorunDir = join(zdotDir, "zshrc.d")
 
 export const red = "\u{001B}[31m"
 export const green = "\u{001B}[32m"
