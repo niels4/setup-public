@@ -1,1 +1,2 @@
-vim.cmd.runtime { 'after/ftplugin/javascript.lua', bang = true }
+local ftplugin = require 'custom.util.ftplugin'
+ftplugin.extend 'javascript'
