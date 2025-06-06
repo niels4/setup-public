@@ -2,3 +2,6 @@ Host *
   AddKeysToAgent yes
   UseKeychain yes
   IdentityFile ~/.ssh/id_mykey
+
+# Include drop-in configurations
+Include ~/.ssh/config.d/*.conf
