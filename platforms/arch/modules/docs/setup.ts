@@ -2,6 +2,6 @@ import { pacman } from "#arch/arch-util.ts"
 import { cmd } from "#shared/util.ts"
 
 export default async function setup() {
-  await pacman("tealdeer wikiman arch-wiki-docs")
+  await pacman("man wikiman arch-wiki-docs tealdeer ")
   await cmd("tldr --update")
 }
