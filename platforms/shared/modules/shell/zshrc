@@ -69,7 +69,7 @@ alias print-gist="~/s/print-gist.sh"
 alias webdev="~/s/webdev"
 alias shelldev="~/s/shelldev"
 # quickly edit and source zsh config
-alias ezsh="nvim ~/.zshrc"
+alias ezsh="nvim ${ZDOTDIR}/.zshrc"
 alias rzsh="killall -USR1 zsh"
 # other aliases
 alias ls='ls --color'
