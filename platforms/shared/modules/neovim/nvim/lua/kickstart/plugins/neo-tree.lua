@@ -22,6 +22,7 @@ return {
           ['\\'] = 'close_window',
 
           -- custom: add custom keymappings
+          ['/'] = 'noop',
           ['oc'] = 'noop',
           ['od'] = 'noop',
           ['og'] = 'noop',
@@ -37,6 +38,7 @@ return {
           ['c'] = 'close_all_subnodes',
           ['l'] = 'set_root',
           ['h'] = 'navigate_up',
+          ['F'] = 'fuzzy_finder',
           ['J'] = { 'scroll_preview', config = { direction = -10 } },
           ['K'] = { 'scroll_preview', config = { direction = 10 } },
 
