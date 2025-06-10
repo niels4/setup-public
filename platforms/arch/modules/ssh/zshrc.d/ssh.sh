@@ -1,6 +1,6 @@
 # use keychain as the ssh-agent
 # set SSH_AUTH_SOCK and SSH_AGENT_PID using keychain
-eval $(keychain --quiet --eval)
+eval $(keychain --quiet --dir "$XDG_STATE_HOME/keychain" --eval)
 
 gpg_pass_key=$(cat $PASSWORD_STORE_DIR/.gpg-id)
 ssh_private_key_file="$HOME/.ssh/id_mykey"
