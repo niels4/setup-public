@@ -1,16 +1,31 @@
-import { pacman, saveKeyringValue } from "#arch/arch-util.ts"
-import { bold, homedir, host, red, reset, username, zshAutorunDir } from "#shared/constants.ts"
-import { addLineToZshenv, cmd, randomHexString, replaceFileWithLink } from "#shared/util.ts"
+import { pacman, savePassSecret } from "#arch/arch-util.ts"
+import { dataHome, homedir, host, username, zshAutorunDir } from "#shared/constants.ts"
+import {
+  addLineToZshenv,
+  cmd,
+  cmdIsSuccessful,
+  randomHexString,
+  readUserPassword,
+  replaceFileWithLink,
+  runExpect,
+} from "#shared/util.ts"
 import fs from "fs-extra"
 import { join } from "node:path"
-import { read } from "read"
 
 const generatePassphrase = () => randomHexString(50)
 
-const keyName = "id_mykey"
+const sshKeyName = "id_mykey"
 const __dirname = import.meta.dirname
 const sshDir = join(homedir, ".ssh")
-const keyFile = join(sshDir, keyName)
+const sshConfigD = join(sshDir, "config.d")
+const sshKeyFile = join(sshDir, sshKeyName)
+
+const gpgDir = join(dataHome, "gnupg")
+const gpgKeyId = `${username}@${host}`
+
+const passStoreDir = join(dataHome, "password-store")
+const passStoreInitFile = join(passStoreDir, ".gpg-id")
+const passStoreShhKey = "ssh/passphrase"
 
 const sshConfigLink = {
   src: join(__dirname, "config"),
@@ -22,42 +37,73 @@ const sshZshConfigLink = {
   dst: join(zshAutorunDir, "ssh.sh"),
 }
 
-const createSshKey = async () => {
-  const passphrase = await generatePassphrase()
-
-  const password = await read({
-    prompt: "Enter password to save ssh passphrase to keyring: ",
-    silent: true,
-    replace: "*",
-  })
-
-  const saveResult = await saveKeyringValue({
-    key: "ssh passphrase",
-    value: passphrase,
-    password,
-  })
-
-  if (!saveResult) {
-    console.error(`${red}${bold}Password Incorrect. Could not unlock keyring!${reset}`)
-    process.exit(1)
+const initGpg = async () => {
+  await fs.ensureDir(gpgDir)
+  await cmd(`chmod 700 ${gpgDir}`)
+  if (await cmdIsSuccessful(`gpg --list-keys ${gpgKeyId}`)) {
+    return
   }
 
-  await cmd(`ssh-keygen -t ed25519 -C "${username}@${host}" -N ${passphrase} -f ${keyFile}`)
+  // use user's password as default password for password-store.
+  // if you want to use a password that is different than your user password, use the
+  // change-password-store-password alias defined in ./zshrc.d/ssh.sh
+  const passphrase = await readUserPassword("Enter password to save ssh passphrase to keyring: ")
+
+  await cmd("gpg --batch --generate-key", {
+    inputs: [
+      "Key-Type: eddsa\n",
+      "Key-Curve: ed25519\n",
+      "Subkey-Type: ecdh\n",
+      "Subkey-Curve: cv25519\n",
+      `Name-Real: ${username}\n`,
+      `Name-Email: ${gpgKeyId}\n`,
+      "Expire-Date: 0\n",
+      `Passphrase: ${passphrase}\n`,
+      "%commit\n",
+    ],
+  })
+}
+
+const initPass = async () => {
+  if (await fs.pathExists(passStoreInitFile)) {
+    return
+  }
+  await cmd(`pass init ${gpgKeyId}`)
+}
+
+const initSshKey = async () => {
+  if (await fs.pathExists(sshKeyFile)) {
+    return
+  }
+  const passphrase = await generatePassphrase()
+
+  await savePassSecret(passStoreShhKey, passphrase)
+
+  const keygenScript = `
+spawn ssh-keygen -t ed25519 -C "${username}@${host}"
+expect "Enter file in which to save the key"
+send -- "${sshKeyFile}\r"
+expect -re {Enter passphrase.*}
+send -- "${passphrase}\r"
+expect "Enter same passphrase again: "
+send -- "${passphrase}\r"
+`
+  await runExpect(keygenScript)
 }
 
 export default async function setup() {
-  await addLineToZshenv("export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gcr/ssh")
-  await pacman("gnome-keyring libsecret")
+  await addLineToZshenv("export GNUPGHOME=$XDG_DATA_HOME/gnupg")
+  await addLineToZshenv("export PASSWORD_STORE_DIR=$XDG_DATA_HOME/password-store")
 
-  await cmd("systemctl --user enable --now gcr-ssh-agent.socket")
+  await pacman("pass keychain")
 
   await replaceFileWithLink(sshZshConfigLink)
   await replaceFileWithLink(sshConfigLink)
   await cmd(`chmod 600 ${sshConfigLink.dst}`)
-  await fs.ensureDir(join(sshDir, "config.d"))
+  await fs.ensureDir(sshConfigD)
+  await cmd(`chmod 700 ${sshConfigD}`)
 
-  const keyExists = await fs.pathExists(keyFile)
-  if (!keyExists) {
-    await createSshKey()
-  }
+  await initGpg()
+  await initPass()
+  await initSshKey()
 }
