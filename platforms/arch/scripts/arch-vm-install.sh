@@ -158,7 +158,9 @@ EOF
 
   useradd -m -G wheel -s /bin/bash ${username}
 
-  yes ${password} | passwd ${username}
+  chpasswd <<EOF
+${username}:${password}
+EOF
 
   mkdir /home/${username}/.ssh
   chown ${username}:${username} /home/${username}/.ssh
