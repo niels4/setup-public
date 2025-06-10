@@ -9,27 +9,31 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 pushd ~/setup
 
-git fetch
+# make sure git repo is up to date
+if [-d .git]; then
+  git fetch
 
-if [[ `git status --porcelain` ]]; then
-  echo "Local changes in git directory"
-fi
+  if [[ `git status --porcelain` ]]; then
+    echo "Local changes in git directory"
+  fi
 
-UPSTREAM=${1:-'@{u}'}
-LOCAL=$(git rev-parse @)
-REMOTE=$(git rev-parse "$UPSTREAM")
-BASE=$(git merge-base @ "$UPSTREAM")
+  UPSTREAM=${1:-'@{u}'}
+  LOCAL=$(git rev-parse @)
+  REMOTE=$(git rev-parse "$UPSTREAM")
+  BASE=$(git merge-base @ "$UPSTREAM")
 
-if [ $LOCAL = $REMOTE ]; then
-    echo "Branch Up-to-date"
-elif [ $LOCAL = $BASE ]; then
-    echo "Need to pull, branch is behind"
-    git pull
-elif [ $REMOTE = $BASE ]; then
-    echo "Need to push, branch is ahead"
-    git push
-else
-    echo "Branch diverged from remote!"
+  if [ $LOCAL = $REMOTE ]; then
+      echo "Branch Up-to-date"
+  elif [ $LOCAL = $BASE ]; then
+      echo "Need to pull, branch is behind"
+      git pull
+  elif [ $REMOTE = $BASE ]; then
+      echo "Need to push, branch is ahead"
+      git push
+  else
+      echo "Branch diverged from remote!"
+  fi
+
 fi
 
 ./setup.sh
