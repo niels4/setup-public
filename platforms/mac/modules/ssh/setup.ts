@@ -23,7 +23,16 @@ const sshZshConfigLink = {
 const createSshKey = async () => {
   const passphrase = await generatePassphrase()
 
-  await cmd(`ssh-keygen -t ed25519 -C "${username}@${host}" -N ${passphrase} -f ${keyFile}`)
+  const keygenScript = `
+spawn ssh-keygen -t ed25519 -C "${username}@${host}"
+expect "Enter file in which to save the key"
+send -- "${keyFile}\r"
+expect -re {Enter passphrase.*}
+send -- "${passphrase}\r"
+expect "Enter same passphrase again: "
+send -- "${passphrase}\r"
+`
+  await runExpect(keygenScript)
 
   const sshAddScript = `
 spawn ssh-add --apple-use-keychain ${keyFile}
