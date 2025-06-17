@@ -1,5 +1,5 @@
-import { configHome } from "#shared/constants.ts"
-import { replaceFileWithLink } from "#shared/util.ts"
+import { configHome } from "#shared/src/constants.ts"
+import { replaceFileWithLink } from "#shared/src/util.ts"
 import { join } from "path"
 
 const __dirname = import.meta.dirname

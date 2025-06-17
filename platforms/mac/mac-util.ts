@@ -1,4 +1,4 @@
-import { cmd } from "#shared/util.ts"
+import { cmd } from "#shared/src/util.ts"
 import { join } from "node:path"
 
 export const brewBundle = async (dir: string) => {

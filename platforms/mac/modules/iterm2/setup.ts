@@ -1,6 +1,6 @@
 import { preferencesDir } from "#mac/mac-constants.ts"
 import { brewBundle } from "#mac/mac-util.ts"
-import { replaceFile } from "#shared/util.ts"
+import { replaceFile } from "#shared/src/util.ts"
 import { join } from "node:path"
 
 const plistFile = "com.googlecode.iterm2.plist"

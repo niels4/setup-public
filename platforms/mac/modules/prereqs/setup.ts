@@ -1,7 +1,7 @@
 import { brewBundle } from "#mac/mac-util.ts"
-import { zshenv } from "#shared/constants.ts"
 import sharedPrereqsSetup from "#shared/modules/prereqs/setup.ts"
-import { addLineToZshenv } from "#shared/util.ts"
+import { zshenv } from "#shared/src/constants.ts"
+import { addLineToZshenv } from "#shared/src/util.ts"
 import fs from "fs-extra"
 
 const homebrewUpdateRate = `export HOMEBREW_AUTO_UPDATE_SECS=43200`

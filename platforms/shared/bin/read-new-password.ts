@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readNewPassword } from "#shared/util.ts"
+import { readNewPassword } from "#shared/src/util.ts"
 
 const prompt = process.argv[2]
 

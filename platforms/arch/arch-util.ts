@@ -1,4 +1,4 @@
-import { cmd } from "#shared/util.ts"
+import { cmd } from "#shared/src/util.ts"
 
 export const pacman = (packages: string) => {
   return cmd(`sudo pacman --needed --noconfirm -S ${packages}`)

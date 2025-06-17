@@ -1,5 +1,5 @@
 import { pacman, savePassSecret } from "#arch/arch-util.ts"
-import { dataHome, homedir, host, username, zshAutorunDir } from "#shared/constants.ts"
+import { dataHome, homedir, host, username, zshAutorunDir } from "#shared/src/constants.ts"
 import {
   addLineToZshenv,
   cmd,
@@ -8,7 +8,7 @@ import {
   readUserPassword,
   replaceFileWithLink,
   runExpect,
-} from "#shared/util.ts"
+} from "#shared/src/util.ts"
 import fs from "fs-extra"
 import { join } from "node:path"
 

@@ -1,5 +1,5 @@
-import { homedir, zshAutorunDir } from "#shared/constants.ts"
-import { addLineToZshenv, replaceFileWithLink } from "#shared/util.ts"
+import { homedir, zshAutorunDir } from "#shared/src/constants.ts"
+import { addLineToZshenv, replaceFileWithLink } from "#shared/src/util.ts"
 import { join } from "path"
 
 const __dirname = import.meta.dirname

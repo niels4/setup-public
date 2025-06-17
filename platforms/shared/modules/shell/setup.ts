@@ -1,5 +1,5 @@
-import { configHome, homedir, zdotDir, zshAutorunDir } from "#shared/constants.ts"
-import { cmd, replaceFileWithLink } from "#shared/util.ts"
+import { configHome, homedir, zdotDir, zshAutorunDir } from "#shared/src/constants.ts"
+import { cmd, replaceFileWithLink } from "#shared/src/util.ts"
 import fs from "fs-extra"
 import { join } from "node:path"
 

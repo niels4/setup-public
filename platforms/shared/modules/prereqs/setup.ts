@@ -1,5 +1,5 @@
-import { sharedDir, zdotDir } from "#shared/constants.ts"
-import { addLineToZshenv, replaceFileWithLink } from "#shared/util.ts"
+import { sharedDir, zdotDir } from "#shared/src/constants.ts"
+import { addLineToZshenv, replaceFileWithLink } from "#shared/src/util.ts"
 import { join } from "node:path"
 
 const baseVarsDst = join(zdotDir, "base-vars.sh")

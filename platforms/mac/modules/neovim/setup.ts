@@ -1,7 +1,7 @@
 import { brewBundle } from "#mac/mac-util.ts"
-import { zshAutorunDir } from "#shared/constants.ts"
 import sharedNeovimSetup from "#shared/modules/neovim/setup.ts"
-import { replaceFileWithLink } from "#shared/util.ts"
+import { zshAutorunDir } from "#shared/src/constants.ts"
+import { replaceFileWithLink } from "#shared/src/util.ts"
 import { join } from "node:path"
 
 const __dirname = import.meta.dirname
