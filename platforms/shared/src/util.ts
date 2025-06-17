@@ -11,7 +11,7 @@ const randomBytesAsync = promisify(randomBytes)
 export const escapeDoubleQuotes = (str: string) => str.replace(/"/g, `\\"`)
 export const escapeDollarSigns = (str: string) => str.replace(/\$/g, `\\$`)
 
-const handleInputs = (stdin: Stream.Writable, inputs?: string[]) => {
+const handleShellInputs = (stdin: Stream.Writable, inputs?: string[]) => {
   if (!inputs || inputs.length === 0) {
     return
   }
@@ -21,19 +21,19 @@ const handleInputs = (stdin: Stream.Writable, inputs?: string[]) => {
   stdin.end()
 }
 
-type CmdOptions = {
+type ShellOptions = {
   inputs?: string[]
   silent?: boolean
 }
 
-export const cmd = async (cmdStr: string, options?: CmdOptions): Promise<string> => {
-  cmdStr = `source ${zshenv}; ${cmdStr}`
-  const cp = spawn(cmdStr, { shell: true })
+export const shell = async (command: string, options?: ShellOptions): Promise<string> => {
+  command = `source ${zshenv}; ${command}`
+  const cp = spawn(command, { shell: true })
   if (!options?.silent) {
     cp.stdout.pipe(process.stdout)
     cp.stderr.pipe(process.stderr)
   }
-  handleInputs(cp.stdin, options?.inputs)
+  handleShellInputs(cp.stdin, options?.inputs)
 
   let result = ""
 
@@ -52,9 +52,9 @@ export const cmd = async (cmdStr: string, options?: CmdOptions): Promise<string>
   })
 }
 
-export const cmdIsSuccessful = async (command: string, options?: CmdOptions) => {
+export const shellIsSuccessful = async (command: string, options?: ShellOptions) => {
   try {
-    await cmd(command, options)
+    await shell(command, options)
     return true
   } catch {
     return false
@@ -77,13 +77,13 @@ export const replaceFile = async ({ src, dst }: FileLink) => {
 
 export const fileContainsText = async (file: string, text: string) => {
   const escapedText = escapeDoubleQuotes(escapeDollarSigns(text))
-  return cmdIsSuccessful(`rg --fixed-strings "${escapedText}" ${file}`)
+  return shellIsSuccessful(`rg --fixed-strings "${escapedText}" ${file}`)
 }
 
 export const addLineToZshenv = async (line: string) => {
   if (!(await fileContainsText(zshenv, line))) {
     const escapedLine = escapeDoubleQuotes(escapeDollarSigns(line))
-    await cmd(`echo "${escapedLine}" >> ${zshenv}`)
+    await shell(`echo "${escapedLine}" >> ${zshenv}`)
   }
 }
 
@@ -101,7 +101,7 @@ match_max 100000
 export const runExpect = async (expectScript: string, options?: { prepend: string }) => {
   const prepend = options?.prepend ?? ""
   const command = `${prepend} expect`
-  return cmd(command, { inputs: [expectSettings, expectScript, "\n", "expect eof"] })
+  return shell(command, { inputs: [expectSettings, expectScript, "\n", "expect eof"] })
 }
 
 // read input and verify that it matches user pw
@@ -117,7 +117,7 @@ export const readUserPassword = async (promptIn: string = "Enter user password: 
       replace: "*",
     })
 
-    isPasswordCorrect = await cmdIsSuccessful(`su ${username}`, { silent: true, inputs: [password] })
+    isPasswordCorrect = await shellIsSuccessful(`su ${username}`, { silent: true, inputs: [password] })
     if (!isPasswordCorrect) {
       prompt = "\nPassword incorrect! Enter password again: "
     }

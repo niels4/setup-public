@@ -2,12 +2,12 @@ import { pacman, savePassSecret } from "#arch/arch-util.ts"
 import { dataHome, homedir, host, username, zshAutorunDir } from "#shared/src/constants.ts"
 import {
   addLineToZshenv,
-  cmd,
-  cmdIsSuccessful,
   randomHexString,
   readUserPassword,
   replaceFileWithLink,
   runExpect,
+  shell,
+  shellIsSuccessful,
 } from "#shared/src/util.ts"
 import fs from "fs-extra"
 import { join } from "node:path"
@@ -39,8 +39,8 @@ const sshZshConfigLink = {
 
 const initGpg = async () => {
   await fs.ensureDir(gpgDir)
-  await cmd(`chmod 700 ${gpgDir}`)
-  if (await cmdIsSuccessful(`gpg --list-keys ${gpgKeyId}`)) {
+  await shell(`chmod 700 ${gpgDir}`)
+  if (await shellIsSuccessful(`gpg --list-keys ${gpgKeyId}`)) {
     return
   }
 
@@ -49,7 +49,7 @@ const initGpg = async () => {
   // change-password-store-password alias defined in ./zshrc.d/ssh.sh
   const passphrase = await readUserPassword("Enter password to save ssh passphrase to keyring: ")
 
-  await cmd("gpg --batch --generate-key", {
+  await shell("gpg --batch --generate-key", {
     inputs: [
       "Key-Type: eddsa\n",
       "Key-Curve: ed25519\n",
@@ -68,7 +68,7 @@ const initPass = async () => {
   if (await fs.pathExists(passStoreInitFile)) {
     return
   }
-  await cmd(`pass init ${gpgKeyId}`)
+  await shell(`pass init ${gpgKeyId}`)
 }
 
 const initSshKey = async () => {
@@ -99,9 +99,9 @@ export default async function setup() {
 
   await replaceFileWithLink(sshZshConfigLink)
   await replaceFileWithLink(sshConfigLink)
-  await cmd(`chmod 600 ${sshConfigLink.dst}`)
+  await shell(`chmod 600 ${sshConfigLink.dst}`)
   await fs.ensureDir(sshConfigD)
-  await cmd(`chmod 700 ${sshConfigD}`)
+  await shell(`chmod 700 ${sshConfigD}`)
 
   await initGpg()
   await initPass()

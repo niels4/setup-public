@@ -1,5 +1,5 @@
 import { homedir, host, username, zshAutorunDir } from "#shared/src/constants.ts"
-import { cmd, randomHexString, replaceFileWithLink, runExpect } from "#shared/src/util.ts"
+import { randomHexString, replaceFileWithLink, runExpect, shell } from "#shared/src/util.ts"
 import fs from "fs-extra"
 import { join } from "node:path"
 
@@ -46,7 +46,7 @@ send -- "${passphrase}\r"
 export default async function setup() {
   await replaceFileWithLink(sshConfigLink)
   replaceFileWithLink(sshZshConfigLink)
-  await cmd(`chmod 600 ${sshConfigLink.dst}`)
+  await shell(`chmod 600 ${sshConfigLink.dst}`)
   await fs.ensureDir(join(sshDir, "config.d"))
 
   const keyExists = await fs.pathExists(keyFile)
