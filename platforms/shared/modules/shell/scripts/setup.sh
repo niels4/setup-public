@@ -10,7 +10,7 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 pushd ~/setup
 
 # make sure git repo is up to date
-if [-d .git]; then
+if [ -d .git ]; then
   git fetch
 
   if [[ `git status --porcelain` ]]; then
