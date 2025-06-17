@@ -44,5 +44,18 @@ return {
     vim.keymap.set('v', ',r', send_selected(repl_window))
     vim.keymap.set('n', ',r', send_paragraph(repl_window))
     vim.keymap.set('i', '<m-r>', send_paragraph_insert(repl_window))
+
+    vim.g.f4_command = 'npm test'
+    vim.g.f5_command = 'npm start'
+
+    local save_and_run = function(key)
+      return function()
+        vim.cmd 'w'
+        tmux_repl.send_text(shell_window, vim.g[key .. '_command'])
+      end
+    end
+
+    vim.keymap.set({ 'n', 'i' }, '<f5>', save_and_run 'f5')
+    vim.keymap.set({ 'n', 'i' }, '<f4>', save_and_run 'f4')
   end,
 }
