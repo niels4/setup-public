@@ -228,6 +228,7 @@ return {
         eslint = {},
         jsonls = {},
         ts_ls = {},
+        gopls = {},
 
         lua_ls = {
           -- cmd = { ... },
