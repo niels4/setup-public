@@ -119,7 +119,8 @@ export const readUserPassword = async (promptIn: string = "Enter user password: 
 
     isPasswordCorrect = await shellIsSuccessful(`su ${username}`, { silent: true, inputs: [password] })
     if (!isPasswordCorrect) {
-      prompt = "\nPassword incorrect! Enter password again: "
+      console.log("")
+      prompt = "Password incorrect! Enter password again: "
     }
   }
 
@@ -151,7 +152,8 @@ export const readNewPassword = async (promptIn: string = "Enter new password: ",
 
     isPasswordCorrect = password === password2
     if (!isPasswordCorrect) {
-      prompt = "\nPasswords do not match. Please Try again.\n" + promptIn
+      console.log("")
+      prompt = "Passwords do not match. Please Try again.\n" + promptIn
     }
   }
 
