@@ -6,9 +6,12 @@
   "description": "Setup and synchronize your dev environments on different platforms",
   "scripts": {
     "format": "prettier ./platforms --write",
-    "typecheck": "npx tsc",
     "lint": "eslint ./platforms",
-    "test": "npm run lint && npm run typecheck"
+    "typecheck": "npx tsc",
+    "test:run": "vitest --run platforms/",
+    "test:coverage": "vitest --run --coverage platforms/",
+    "test:watch": "vitest --watch --coverage --ui platforms/",
+    "test": "npm run lint && npm run typecheck && npm run test:run"
   },
   "imports": {
     "#shared/*": "./platforms/shared/*",
@@ -22,11 +25,14 @@
     "@eslint/js": "^9.28.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.15.29",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
     "eslint": "^9.28.0",
     "globals": "^16.2.0",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
-    "typescript-eslint": "^8.33.0"
+    "typescript-eslint": "^8.33.0",
+    "vitest": "^3.2.4"
   },
   "repository": {
     "type": "git",
