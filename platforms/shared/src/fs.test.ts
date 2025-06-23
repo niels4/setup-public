@@ -5,14 +5,14 @@ import { beforeAll, describe, expect, it } from "vitest"
 import {
   checkDir,
   checkFile,
-  checkPathExist,
+  checkPathExists,
   checkSymlink,
+  copy_rf,
   createFile,
   ensureDir,
   ensureFile,
   ensureSymlink,
   PathState,
-  replaceFile,
 } from "./fs.ts"
 
 const fixturesDir = join(tmpdir(), "setup-fs-test")
@@ -26,14 +26,14 @@ describe("shared fs", () => {
   describe("checkPathExist", () => {
     describe("when path exists", () => {
       it("should return true", async () => {
-        expect(await checkPathExist(fixturesDir)).toBe(true)
+        expect(await checkPathExists(fixturesDir)).toBe(true)
       })
     })
 
     describe("when path doesn't exist", () => {
       it("should return false", async () => {
         const badPath = join(fixturesDir, "check-path-doesnt-exist")
-        expect(await checkPathExist(badPath)).toBe(false)
+        expect(await checkPathExists(badPath)).toBe(false)
       })
     })
   })
@@ -370,7 +370,7 @@ describe("shared fs", () => {
       })
 
       it("should replace the existing file with the src file", async () => {
-        await replaceFile({ src, dst })
+        await copy_rf({ src, dst })
         const fileContents = (await fs.readFile(dst)).toString()
         expect(fileContents).toBe("Source File Content")
       })

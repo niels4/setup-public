@@ -1,5 +1,5 @@
 import { homedir, host, username, zshAutorunDir } from "#shared/src/constants.ts"
-import { checkPathExist, ensureDir, ensureSymlink } from "#shared/src/fs.ts"
+import { checkPathExists, ensureDir, ensureSymlink } from "#shared/src/fs.ts"
 import { randomHexString, runExpect, shell } from "#shared/src/util.ts"
 import { join } from "node:path"
 
@@ -49,7 +49,7 @@ export default async function setup() {
   await shell(`chmod 600 ${sshConfigLink.dst}`)
   await ensureDir(join(sshDir, "config.d"))
 
-  const keyExists = await checkPathExist(keyFile)
+  const keyExists = await checkPathExists(keyFile)
   if (!keyExists) {
     await createSshKey()
   }

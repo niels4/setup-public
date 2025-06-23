@@ -32,7 +32,7 @@ export const check = async (fileTypeCheck: FileTypeCheck, path: string) => {
 }
 
 // a simpler version of the check function for when you just want a true or false value
-export const checkPathExist = async (path: string) => {
+export const checkPathExists = async (path: string) => {
   try {
     await lstat(path)
   } catch {
@@ -40,8 +40,6 @@ export const checkPathExist = async (path: string) => {
   }
   return true
 }
-
-export const rmrf = (path: string) => rm(path, { recursive: true, force: true })
 
 type CheckFunc = (path: string) => Promise<PathState>
 
@@ -52,8 +50,8 @@ export const ensure = async (checkFunc: CheckFunc, createFunc: CreateFunc, path:
     case PathState.exists:
       return
     case PathState.wrong_type:
-      // delete the wrong type so we can create the dir
-      await rmrf(path)
+      // delete the wrong type so we can create the correct fs type
+      await remove_rf(path)
       break
     case PathState.no_exists:
       // make sure the parent exists and is a directory
@@ -69,28 +67,18 @@ export const ensureDir = (path: string) => ensure(checkDir, mkdir, path)
 
 export const checkFile = (path: string) => check("isFile", path)
 
-// will reject promise if path doesn't exist
-export const createFile = async (path: string) => {
-  await writeFile(path, "")
-}
+// will reject promise if parent directory doesn't exist
+export const createFile = (path: string) => writeFile(path, "")
 
 export const ensureFile = (path: string) => ensure(checkFile, createFile, path)
 
 // if the symlink (dst) exists but points to the wrong src, return wrong_type
 export const checkSymlink = async (src: string, dst: string) => {
-  switch (await check("isSymbolicLink", dst)) {
-    case PathState.exists: {
-      const currentSrc = await readlink(dst)
-      if (currentSrc === src) {
-        return PathState.exists
-      }
-      return PathState.wrong_type
-    }
-    case PathState.no_exists:
-      return PathState.no_exists
-    case PathState.wrong_type:
-      return PathState.wrong_type
+  const state = await check("isSymbolicLink", dst)
+  if (state === PathState.exists && (await readlink(dst)) !== src) {
+    return PathState.wrong_type
   }
+  return state
 }
 
 export type FileLink = {
@@ -101,4 +89,6 @@ export type FileLink = {
 export const ensureSymlink = ({ src, dst }: FileLink) =>
   ensure(checkSymlink.bind(null, src), symlink.bind(null, src), dst)
 
-export const replaceFile = async ({ src, dst }: FileLink) => cp(src, dst, { recursive: true, force: true })
+export const copy_rf = async ({ src, dst }: FileLink) => cp(src, dst, { recursive: true, force: true })
+
+export const remove_rf = (path: string) => rm(path, { recursive: true, force: true })

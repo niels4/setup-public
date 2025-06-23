@@ -1,6 +1,6 @@
 import { preferencesDir } from "#mac/mac-constants.ts"
 import { brewBundle } from "#mac/mac-util.ts"
-import { replaceFile } from "#shared/src/fs.ts"
+import { copy_rf } from "#shared/src/fs.ts"
 import { join } from "node:path"
 
 const plistFile = "com.googlecode.iterm2.plist"
@@ -13,5 +13,5 @@ const iterm2PlistLink = {
 
 export default async function setup() {
   await brewBundle(__dirname)
-  await replaceFile(iterm2PlistLink)
+  await copy_rf(iterm2PlistLink)
 }

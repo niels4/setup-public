@@ -1,5 +1,5 @@
 import { configHome, homedir, zdotDir, zshAutorunDir } from "#shared/src/constants.ts"
-import { checkPathExist, ensureSymlink } from "#shared/src/fs.ts"
+import { checkPathExists, ensureSymlink } from "#shared/src/fs.ts"
 import { shell } from "#shared/src/util.ts"
 import { join } from "node:path"
 
@@ -39,7 +39,7 @@ export default async function setup() {
   await ensureSymlink(zshPluginsConfig)
   await ensureSymlink(reloadAllZshConfig)
 
-  if (!(await checkPathExist(zinitHome))) {
+  if (!(await checkPathExists(zinitHome))) {
     await shell('git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"')
   }
 }

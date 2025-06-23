@@ -1,6 +1,6 @@
 import { pacman, savePassSecret } from "#arch/arch-util.ts"
 import { dataHome, homedir, host, username, zshAutorunDir } from "#shared/src/constants.ts"
-import { checkPathExist, ensureDir, ensureSymlink } from "#shared/src/fs.ts"
+import { checkPathExists, ensureDir, ensureSymlink } from "#shared/src/fs.ts"
 import {
   addLineToZshenv,
   randomHexString,
@@ -64,14 +64,14 @@ const initGpg = async () => {
 }
 
 const initPass = async () => {
-  if (await checkPathExist(passStoreInitFile)) {
+  if (await checkPathExists(passStoreInitFile)) {
     return
   }
   await shell(`pass init ${gpgKeyId}`)
 }
 
 const initSshKey = async () => {
-  if (await checkPathExist(sshKeyFile)) {
+  if (await checkPathExists(sshKeyFile)) {
     return
   }
   const passphrase = await generatePassphrase()
