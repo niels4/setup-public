@@ -1,4 +1,4 @@
-import { type DevEnvironments, runSetup } from "#shared/runner.ts"
+import { type DevEnvironments, runSetup } from "#shared/src/runner.ts"
 
 const platform = "mac"
 
