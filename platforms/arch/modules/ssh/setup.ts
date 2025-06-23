@@ -1,15 +1,14 @@
 import { pacman, savePassSecret } from "#arch/arch-util.ts"
 import { dataHome, homedir, host, username, zshAutorunDir } from "#shared/src/constants.ts"
+import { checkPathExist, ensureDir, ensureSymlink } from "#shared/src/fs.ts"
 import {
   addLineToZshenv,
   randomHexString,
   readUserPassword,
-  replaceFileWithLink,
   runExpect,
   shell,
   shellIsSuccessful,
 } from "#shared/src/util.ts"
-import fs from "fs-extra"
 import { join } from "node:path"
 
 const generatePassphrase = () => randomHexString(50)
@@ -38,7 +37,7 @@ const sshZshConfigLink = {
 }
 
 const initGpg = async () => {
-  await fs.ensureDir(gpgDir)
+  await ensureDir(gpgDir)
   await shell(`chmod 700 ${gpgDir}`)
   if (await shellIsSuccessful(`gpg --list-keys ${gpgKeyId}`)) {
     return
@@ -65,14 +64,14 @@ const initGpg = async () => {
 }
 
 const initPass = async () => {
-  if (await fs.pathExists(passStoreInitFile)) {
+  if (await checkPathExist(passStoreInitFile)) {
     return
   }
   await shell(`pass init ${gpgKeyId}`)
 }
 
 const initSshKey = async () => {
-  if (await fs.pathExists(sshKeyFile)) {
+  if (await checkPathExist(sshKeyFile)) {
     return
   }
   const passphrase = await generatePassphrase()
@@ -97,10 +96,10 @@ export default async function setup() {
 
   await pacman("pass keychain")
 
-  await replaceFileWithLink(sshZshConfigLink)
-  await replaceFileWithLink(sshConfigLink)
+  await ensureSymlink(sshZshConfigLink)
+  await ensureSymlink(sshConfigLink)
   await shell(`chmod 600 ${sshConfigLink.dst}`)
-  await fs.ensureDir(sshConfigD)
+  await ensureDir(sshConfigD)
   await shell(`chmod 700 ${sshConfigD}`)
 
   await initGpg()

@@ -1,5 +1,6 @@
 import { homedir, zshAutorunDir } from "#shared/src/constants.ts"
-import { addLineToZshenv, replaceFileWithLink } from "#shared/src/util.ts"
+import { ensureSymlink } from "#shared/src/fs.ts"
+import { addLineToZshenv } from "#shared/src/util.ts"
 import { join } from "path"
 
 const __dirname = import.meta.dirname
@@ -15,8 +16,8 @@ const nvimZshConfigLink = {
 }
 
 export default async function setup() {
-  await replaceFileWithLink(nvimDirLink)
-  await replaceFileWithLink(nvimZshConfigLink)
+  await ensureSymlink(nvimDirLink)
+  await ensureSymlink(nvimZshConfigLink)
   await addLineToZshenv("export EDITOR=nvim")
   await addLineToZshenv("export MANPAGER='nvim +Man!'")
 }

@@ -1,4 +1,3 @@
-import fs from "fs-extra"
 import { spawn } from "node:child_process"
 import { randomBytes } from "node:crypto"
 import { type Stream } from "node:stream"
@@ -59,20 +58,6 @@ export const shellIsSuccessful = async (command: string, options?: ShellOptions)
   } catch {
     return false
   }
-}
-
-type FileLink = {
-  src: string
-  dst: string
-}
-
-export const replaceFileWithLink = async ({ src, dst }: FileLink) => {
-  await fs.remove(dst)
-  await fs.ensureSymlink(src, dst)
-}
-
-export const replaceFile = async ({ src, dst }: FileLink) => {
-  await fs.copy(src, dst)
 }
 
 export const fileContainsText = async (file: string, text: string) => {

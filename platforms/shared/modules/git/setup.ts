@@ -1,5 +1,5 @@
 import { configHome } from "#shared/src/constants.ts"
-import { replaceFileWithLink } from "#shared/src/util.ts"
+import { ensureSymlink } from "#shared/src/fs.ts"
 import { join } from "path"
 
 const __dirname = import.meta.dirname
@@ -10,5 +10,5 @@ const configLink = {
 }
 
 export default async function setup() {
-  await replaceFileWithLink(configLink)
+  await ensureSymlink(configLink)
 }

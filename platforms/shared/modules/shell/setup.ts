@@ -1,6 +1,6 @@
 import { configHome, homedir, zdotDir, zshAutorunDir } from "#shared/src/constants.ts"
-import { replaceFileWithLink, shell } from "#shared/src/util.ts"
-import fs from "fs-extra"
+import { checkPathExist, ensureSymlink } from "#shared/src/fs.ts"
+import { shell } from "#shared/src/util.ts"
 import { join } from "node:path"
 
 const __dirname = import.meta.dirname
@@ -33,13 +33,13 @@ const zshPluginsConfig = {
 }
 
 export default async function setup() {
-  await replaceFileWithLink(tmuxConfigLink)
-  await replaceFileWithLink(zshrcLink)
-  await replaceFileWithLink(scriptsDirLink)
-  await replaceFileWithLink(zshPluginsConfig)
-  await replaceFileWithLink(reloadAllZshConfig)
+  await ensureSymlink(tmuxConfigLink)
+  await ensureSymlink(zshrcLink)
+  await ensureSymlink(scriptsDirLink)
+  await ensureSymlink(zshPluginsConfig)
+  await ensureSymlink(reloadAllZshConfig)
 
-  if (!(await fs.pathExists(zinitHome))) {
+  if (!(await checkPathExist(zinitHome))) {
     await shell('git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"')
   }
 }

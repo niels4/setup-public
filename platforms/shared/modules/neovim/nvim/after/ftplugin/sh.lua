@@ -1,3 +1,2 @@
-vim.o.expandtab = false
-vim.o.tabstop = 8
-vim.o.smarttab = false
+vim.bo.expandtab = false
+vim.bo.tabstop = 8
