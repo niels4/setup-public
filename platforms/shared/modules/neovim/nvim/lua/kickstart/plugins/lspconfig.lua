@@ -225,6 +225,10 @@ return {
         --
 
         -- custom: Enable my lsp configs
+        -- biome = {
+        --   mason = false,
+        -- },
+        cssls = {},
         eslint = {},
         jsonls = {},
         ts_ls = {},
