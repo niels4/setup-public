@@ -2,8 +2,17 @@ import { type DevEnvironments, runSetup } from "#shared/src/runner.ts"
 
 const platform = "arch"
 
+const defaultModules = ["prereqs", "ssh", "shell", "shell-tools", "git", "docs", "neovim"]
+
+// can reference shared modules directly with "shared:" prefix
+const extras = [...defaultModules, "shared:extras"]
+
 const devEnvironments: DevEnvironments = {
-  default: ["prereqs", "ssh", "shell", "shell-tools", "git", "docs", "neovim"],
+  default: defaultModules,
+
+  // install extra tools by setting your SETUP_ENV environment variable
+  // SETUP_ENV=extras setup
+  extras,
 }
 
 await runSetup({ platform, devEnvironments })
