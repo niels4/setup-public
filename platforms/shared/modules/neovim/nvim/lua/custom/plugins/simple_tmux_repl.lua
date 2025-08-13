@@ -45,13 +45,21 @@ return {
     vim.keymap.set('n', ',r', send_paragraph(repl_window))
     vim.keymap.set('i', '<m-r>', send_paragraph_insert(repl_window))
 
-    vim.g.f4_command = 'npm test'
-    vim.g.f5_command = 'npm start'
+    -- repeat last command in shell_window. Can override command. example: :let g:f4_command="npm test"
+    vim.g.f4_command = '!!'
+    -- repeat last command in repl_window. :let g:f5_command="<command>" to override
+    vim.g.f5_command = '!!'
 
     local save_and_run = function(key)
+      local window
+      if key == 'f4' then
+        window = shell_window
+      else
+        window = repl_window
+      end
       return function()
         vim.cmd 'w'
-        tmux_repl.send_text(shell_window, vim.g[key .. '_command'])
+        tmux_repl.send_text(window, vim.g[key .. '_command'])
       end
     end
 
