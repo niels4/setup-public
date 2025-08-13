@@ -28,7 +28,10 @@ export const runSetup = async function ({ platform, devEnvironments }: RunSetupA
 
   console.log(`\n${green}Runnning setup for ${bold}${setupEnv}${reset}\n`)
   for (const moduleName of modules) {
-    const { default: setupFunction } = await import(getImportPath(platform, moduleName))
+    const seperatorIndex = moduleName.indexOf(":")
+    const importPlatform = seperatorIndex < 0 ? platform : moduleName.substring(0, seperatorIndex)
+    const importModule = seperatorIndex < 0 ? moduleName : moduleName.substring(seperatorIndex + 1)
+    const { default: setupFunction } = await import(getImportPath(importPlatform, importModule))
     console.log(`\n${green}Starting Module ${bold}${moduleName}${reset}\n`)
     await setupFunction()
     console.log(`\n${green}${checkmark} Finshed Module ${bold}${moduleName}${reset}\n`)
