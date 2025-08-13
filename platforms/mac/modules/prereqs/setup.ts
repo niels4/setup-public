@@ -2,7 +2,7 @@ import { brewBundle } from "#mac/mac-util.ts"
 import sharedPrereqsSetup from "#shared/modules/prereqs/setup.ts"
 import { zshenv } from "#shared/src/constants.ts"
 import { ensureFile } from "#shared/src/fs.ts"
-import { addLineToZshenv } from "#shared/src/util.ts"
+import { addLineToZshenv, shell, shellIsSuccessful } from "#shared/src/util.ts"
 
 const homebrewUpdateRate = `export HOMEBREW_AUTO_UPDATE_SECS=43200`
 const homebrewEnv = `eval "$(/opt/homebrew/bin/brew shellenv)"`
@@ -13,5 +13,8 @@ export default async function setup() {
   await addLineToZshenv(homebrewUpdateRate)
   await addLineToZshenv(homebrewEnv)
   await brewBundle(import.meta.dirname)
+  if (!(await shellIsSuccessful("which cargo"))) {
+    await shell("rustup-init -y")
+  }
   await sharedPrereqsSetup()
 }
