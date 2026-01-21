@@ -7,6 +7,7 @@ base_setup_dir="${arch_setup_dir}/../.."
 sudo pacman -Sy --needed --noconfirm git base-devel go unzip
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
+. "${HOME}/.local/share/cargo/env"
 
 # only run this block if yay is NOT on your PATH
 if ! command -v yay >/dev/null 2>&1;then
@@ -21,21 +22,16 @@ if ! command -v yay >/dev/null 2>&1;then
   popd
 fi
 
-fnm_dir="${HOME}.local/share/fnm"
-
-# Add fnm to path if its installed but not already on the path
-if [ -d "$fnm_dir" ] && ! command -v fnm >/dev/null 2>&1; then
-  export PATH="$fnm_dir"
-fi
-
-# install fnm if it isn't already
-if ! command -v brew >/dev/null 2>&1;then
+# install fnm (fast node manager, similar to nvm)
+if ! command -v fnm >/dev/null 2>&1;then
   curl -fsSL https://fnm.vercel.app/install | bash
 fi
 
-eval "$(fnm env)"
-
-# install fnm (fast node manager, similar to nvm)
+FNM_PATH="${HOME}/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "$(fnm env)"
+fi
 
 # install latest version of nodejs
 fnm install --latest
