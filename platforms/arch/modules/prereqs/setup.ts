@@ -7,7 +7,7 @@ import { shell } from "#shared/src/util.ts"
 // Add required utilities and environment variables that all scripts can rely on
 export default async function setup() {
   await ensureFile(zshenv)
-  await pacman("ripgrep expect")
+  await pacman("ripgrep expect which")
   await shell("cargo default stable")
   await sharedPrereqsSetup()
 }
