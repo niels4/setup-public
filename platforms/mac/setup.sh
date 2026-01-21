@@ -10,11 +10,11 @@ fi
 
 # install latest version of nodejs
 brew install fnm
-eval "$(fnm env --use-on-cd)"
 fnm install --latest
 fnm default latest
+eval "$(fnm env --use-on-cd)"
 
-pushd ${setup_dir}
+pushd "${setup_dir}"
 
 # run setup script
 npm install

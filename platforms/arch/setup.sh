@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 setup_dir=$(dirname "$(realpath "$0")")
 
-# base dev packages
+# ensure nodejs, go, and rust are installed before calling setup
 sudo pacman -Sy --needed --noconfirm git base-devel go rustup
 
 # only run this block if yay is NOT on your PATH
@@ -21,13 +21,12 @@ fi
 # install fnm and latest version of nodejs
 yay -S --needed --noconfirm fnm
 
-eval "$(fnm env --use-on-cd)"
-
 fnm install --latest
 fnm default latest
+eval "$(fnm env --use-on-cd)"
 
 # run setup script
-pushd ${setup_dir}
+pushd "${setup_dir}"
 
 npm install
 node setup.ts
