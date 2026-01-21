@@ -22,6 +22,14 @@
 ## Once the script finishes running, reboot the VM. (you can just type "reboot" in the terminal)
 #  reboot
 
+# Once rebooted, login with the newly created username and password
+# From the home directory, checkout the repo and run the setup script
+
+# git clone https://github.com/niels4/setup-public.git setup && ./setup/setup.sh
+
+# because the script uses pacman and pacman requires sudo to install packages, sudo will ask for your password if it needs it
+
+
 SET_HOSTNAME="arch-vm"
 
 # Partition Disk:
