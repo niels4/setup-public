@@ -7,7 +7,12 @@ trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 # echo an error message before exiting
 trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
-pushd ~/setup
+SETUP_DIR=${SETUP_DIR:-~/setup}
+
+if ! pushd "$SETUP_DIR" >/dev/null 2>&1; then
+  echo "ERROR: Directory ${SETUP_DIR} does not exist. Please check your SETUP_DIR variable (usually set in ~/.zshenv) and make sure your setup repo is checked out at that location."
+    exit 1
+fi
 
 # make sure git repo is up to date
 if [ -d .git ]; then

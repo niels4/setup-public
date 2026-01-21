@@ -2,9 +2,9 @@
 
 setup_dir=$(dirname "$(realpath "$0")")
 
-source "${setup_dir}/platforms/shared/base-vars.sh"
-
 echo "SETUP DIR: ${setup_dir}"
+
+source "${setup_dir}/platforms/shared/base-vars.sh"
 
 if [ "$(uname)" = "Darwin" ]; then
   echo "Platform is mac"

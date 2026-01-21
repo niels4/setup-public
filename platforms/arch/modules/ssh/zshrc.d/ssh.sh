@@ -72,10 +72,10 @@ lock-password-store
 alias change-password-store-password="gpg --change-passphrase $gpg_pass_key"
 
 # script to read in and verify the user password
-alias read-user-password="NODE_NO_WARNINGS=1 ~/setup/platforms/shared/bin/read-user-password.ts"
+alias read-user-password="NODE_NO_WARNINGS=1 $SETUP_DIR/platforms/shared/bin/read-user-password.ts"
 
 # script to read in password twice and verify it matches
-alias read-new-password="NODE_NO_WARNINGS=1 ~/setup/platforms/shared/bin/read-new-password.ts"
+alias read-new-password="NODE_NO_WARNINGS=1 $SETUP_DIR/platforms/shared/bin/read-new-password.ts"
 
 # use this to change your user password and password-store password at the same time
 change-all-passwords() {

@@ -2,6 +2,7 @@ import { hostname, userInfo } from "node:os"
 import { join } from "node:path"
 
 export const setupEnvVar = "SETUP_ENV"
+export const setupDirVar = "SETUP_DIR"
 
 export const sharedDir = join(import.meta.dirname, "..")
 export const platformsDir = join(sharedDir, "..")
