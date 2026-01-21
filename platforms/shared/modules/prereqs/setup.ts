@@ -1,7 +1,7 @@
-import { sharedDir, zdotDir } from "#shared/src/constants.ts"
-import { ensureSymlink } from "#shared/src/fs.ts"
-import { addLineToZshenv } from "#shared/src/util.ts"
 import { join } from "node:path"
+import { setupDirVar, setupRoot, sharedDir, zdotDir } from "#shared/src/constants.ts"
+import { ensureSymlink } from "#shared/src/fs.ts"
+import { addLineToZshenv, replaceZshenvVar, shell } from "#shared/src/util.ts"
 
 const baseVarsDst = join(zdotDir, "base-vars.sh")
 const sourceBaseVars = `source "${baseVarsDst}"`

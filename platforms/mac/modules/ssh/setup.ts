@@ -1,7 +1,7 @@
+import { join } from "node:path"
 import { homedir, host, username, zshAutorunDir } from "#shared/src/constants.ts"
 import { checkPathExists, ensureDir, ensureSymlink } from "#shared/src/fs.ts"
 import { randomHexString, runExpect, shell } from "#shared/src/util.ts"
-import { join } from "node:path"
 
 const generatePassphrase = () => randomHexString(50)
 

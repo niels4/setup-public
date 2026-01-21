@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process"
 import { randomBytes } from "node:crypto"
-import { type Stream } from "node:stream"
+import type { Stream } from "node:stream"
 import { promisify } from "node:util"
 import { username, zshenv } from "./constants.ts"
 import { read } from "./read.ts"
@@ -60,9 +60,16 @@ export const shellIsSuccessful = async (command: string, options?: ShellOptions)
   }
 }
 
+// uses exact string matching
 export const fileContainsText = async (file: string, text: string) => {
   const escapedText = escapeDoubleQuotes(escapeDollarSigns(text))
   return shellIsSuccessful(`rg --fixed-strings "${escapedText}" ${file}`)
+}
+
+// uses exact string matching
+export const deleteLinesContainingText = async (file: string, text: string) => {
+  const escapedText = escapeDoubleQuotes(escapeDollarSigns(text))
+  return shell(`perl -i -ne 'print unless index($_, "${escapedText}") >= 0' ${file}`)
 }
 
 export const addLineToZshenv = async (line: string) => {
@@ -70,6 +77,11 @@ export const addLineToZshenv = async (line: string) => {
     const escapedLine = escapeDoubleQuotes(escapeDollarSigns(line))
     await shell(`echo "${escapedLine}" >> ${zshenv}`)
   }
+}
+
+export const replaceZshenvVar = async (varName: string, value: string) => {
+  await deleteLinesContainingText(zshenv, varName)
+  await addLineToZshenv(`export ${varName}=${value}`)
 }
 
 export const randomHexString = async (byteLength: number) => {
@@ -138,7 +150,7 @@ export const readNewPassword = async (promptIn: string = "Enter new password: ",
     isPasswordCorrect = password === password2
     if (!isPasswordCorrect) {
       console.log("")
-      prompt = "Passwords do not match. Please Try again.\n" + promptIn
+      prompt = `Passwords do not match. Please Try again.\n${promptIn}`
     }
   }
 

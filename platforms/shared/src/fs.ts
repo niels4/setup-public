@@ -18,7 +18,7 @@ type LStatResult = Awaited<ReturnType<typeof lstat>>
 type FileTypeCheck = ExtractFileTypeCheckFunctions<LStatResult>
 
 export const check = async (fileTypeCheck: FileTypeCheck, path: string) => {
-  let stat
+  let stat: Awaited<ReturnType<typeof lstat>>
   try {
     stat = await lstat(path)
   } catch {
@@ -32,7 +32,10 @@ export const check = async (fileTypeCheck: FileTypeCheck, path: string) => {
 }
 
 // a simpler version of the check function for when you just want a true or false value
-export const checkPathExists = async (path: string) => {
+export const checkPathExists = async (path?: string) => {
+  if (!path) {
+    return false
+  }
   try {
     await lstat(path)
   } catch {

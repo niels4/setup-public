@@ -1,6 +1,6 @@
+import { join } from "node:path"
 import { configHome } from "#shared/src/constants.ts"
 import { ensureSymlink } from "#shared/src/fs.ts"
-import { join } from "path"
 
 const __dirname = import.meta.dirname
 

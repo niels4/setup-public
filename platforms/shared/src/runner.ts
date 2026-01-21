@@ -17,7 +17,7 @@ export type RunSetupArgs = {
   devEnvironments: DevEnvironments
 }
 
-export const runSetup = async function ({ platform, devEnvironments }: RunSetupArgs) {
+export const runSetup = async ({ platform, devEnvironments }: RunSetupArgs) => {
   const setupEnv = process.env[setupEnvVar] ?? "default"
   const modules = devEnvironments[setupEnv]
   if (!modules) {

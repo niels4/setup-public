@@ -1,11 +1,11 @@
+import { join } from "node:path"
 import { configHome, homedir, zdotDir, zshAutorunDir } from "#shared/src/constants.ts"
 import { checkPathExists, ensureSymlink } from "#shared/src/fs.ts"
 import { shell } from "#shared/src/util.ts"
-import { join } from "node:path"
 
 const __dirname = import.meta.dirname
 
-const zinitHome = process.env["ZINIT_HOME"]!
+const zinitHome = process.env.ZINIT_HOME
 
 const tmuxConfigLink = {
   src: join(__dirname, "tmux.conf"),

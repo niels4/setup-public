@@ -1,7 +1,7 @@
+import { join } from "node:path"
 import { preferencesDir } from "#mac/mac-constants.ts"
 import { brewBundle } from "#mac/mac-util.ts"
 import { copy_rf } from "#shared/src/fs.ts"
-import { join } from "node:path"
 
 const plistFile = "com.googlecode.iterm2.plist"
 const __dirname = import.meta.dirname
