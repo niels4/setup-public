@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
-setup_dir=$(dirname "$(realpath "$0")")
+arch_setup_dir=$(dirname "$(realpath "$0")")
+base_setup_dir="${arch_setup_dir}/../.."
 
 # ensure nodejs, go, and rust are installed before calling setup
 sudo pacman -Sy --needed --noconfirm git base-devel go rustup
@@ -18,17 +19,24 @@ if ! which yay >/dev/null 2>&1; then
   popd
 fi
 
-# install fnm and latest version of nodejs
+# install fnm (fast node manager, similar to nvm)
 yay -S --needed --noconfirm fnm
+eval "$(fnm env)"
 
+# install latest version of nodejs
 fnm install --latest
 fnm default latest
-eval "$(fnm env --use-on-cd)"
+#
+# install and use version specified in .node-version file to run setup script
+fnm install "$(cat "${base_setup_dir}"/.node-version)"
+fnm use "$(cat "${base_setup_dir}"/.node-version)"
+
+# cd into setup_dir
+pushd "${arch_setup_dir}"
 
 # run setup script
-pushd "${setup_dir}"
-
 npm install
 node setup.ts
 
+# return user back to the directory they were in
 popd
