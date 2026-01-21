@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
 # convert plist files to xml and copy them back to the setup dir so they can be checked into git
 
