@@ -1,6 +1,8 @@
 {
   "Profiles": [
     {
+      "Name": "Dev",
+      "Default Bookmark": "Yes",
       "Link Color": {
         "Red Component": 0,
         "Color Space": "sRGB",
@@ -47,7 +49,6 @@
         "Green Component": 0.558837890625
       },
       "Rows": 50,
-      "Default Bookmark": "No",
       "Right Option Key Sends": 2,
       "Cursor Guide Color": {
         "Red Component": 0.70214027166366577,
@@ -158,7 +159,6 @@
         "Green Component": 0.70645762011684654
       },
       "ASCII Ligatures": true,
-      "Name": "Dev",
       "Cursor Text Color": {
         "Green Component": 1,
         "Red Component": 1,
