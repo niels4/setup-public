@@ -1,7 +1,7 @@
 import { pacman } from "#arch/arch-util.ts"
 import { shell } from "#shared/src/util.ts"
 
-const packages = ["luajit", "stylua", "lua-language-server", "emmylua_ls"]
+const packages = ["luajit", "stylua", "lua-language-server"]
 
 export default async function setup() {
   const promises = []
