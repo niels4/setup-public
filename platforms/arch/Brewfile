@@ -1,0 +1,7 @@
+brew "neovim"
+brew "stylua"
+brew "selene"
+brew "tree-sitter"
+brew "tree-sitter-cli"
+brew "unzip"
+brew "markdownlint-cli"
