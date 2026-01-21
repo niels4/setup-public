@@ -27,5 +27,7 @@ export default async function setup() {
 
   if (nodeVersion) {
     await shell(`fnm use ${nodeVersion}`)
+  } else {
+    await shell("fnm use latest")
   }
 }
