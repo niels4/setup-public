@@ -1,17 +1,26 @@
 #!/usr/bin/env bash
 # This script was created to install arch using the archboot ISO (*-aarch64-ARCH-latest-aarch64.iso) inside of a parallels VM on ARM based apple silicon
+# Its usually the top one with the largest file size
 # https://release.archboot.com/aarch64/latest/iso/
 # https://www.parallels.com/
 
 # Boot up the VM using the archboot ISO
-# First run initial script to enable internet, set locale, set timezone, set pacman mirror and keyring
+# First run initial script to enable internet, set locale, set timezone, set pacman mirror and keyring.  
+# Exit the setup UI after the first set of scripts have run (this script will setup the storage device)
 
 ## To download and run install script:
-# curl https://raw.githubusercontent.com/niels4/setup/refs/heads/main/platforms/arch/scripts/arch-vm-install.sh -o /root/install.sh
+# curl https://raw.githubusercontent.com/niels4/setup-public/refs/heads/main/platforms/arch/scripts/arch-vm-install.sh -o /root/install.sh
+
 ## Open the file in a text editor to make any modifications before installing (such as changing hostname, partition sizes, installed packages, etc)
 # nvim /root/install.sh
+
 ## Run the script:
 # bash /root/install.sh
+
+## The script will prompt to create a user with a password
+
+## Once the script finishes running, reboot the VM. (you can just type "reboot" in the terminal)
+#  reboot
 
 SET_HOSTNAME="arch-vm"
 
@@ -74,13 +83,13 @@ echo ${SET_HOSTNAME} > /mnt/etc/hostname
 # install packages:
 
 # core:
-pacstrap -K /mnt base linux linux-firmware sudo expect man less which vi
+pacstrap -K /mnt base linux linux-firmware sudo which
 
 # keyring for archlinux arm
 pacstrap -K /mnt archlinuxarm-keyring
 
 # utilities:
-pacstrap -K /mnt rsync
+pacstrap -K /mnt vi rsync git man less expect 
 
 # network and ssh server:
 pacstrap -K /mnt networkmanager openssh
