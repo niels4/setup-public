@@ -20,6 +20,8 @@ export default async function setup() {
   await addLineToZshenv(sourceBaseVars)
   await addLineToZshenv(fnmEnv)
   await replaceZshenvVar(setupDirVar, setupRoot)
+  await shell("rustup update")
+
   if (nodeVersion) {
     await shell(`fnm default ${nodeVersion}`)
   }
