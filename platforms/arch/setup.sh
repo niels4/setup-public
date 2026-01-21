@@ -6,7 +6,9 @@ base_setup_dir="${arch_setup_dir}/../.."
 # ensure nodejs, go, and rustup are installed before calling setup
 sudo pacman -Sy --needed --noconfirm git base-devel go unzip
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
+if ! command -v cargo >/dev/null 2>&1;then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
+fi
 . "${HOME}/.local/share/cargo/env"
 
 # only run this block if yay is NOT on your PATH
@@ -23,7 +25,7 @@ if ! command -v yay >/dev/null 2>&1;then
 fi
 
 # install fnm (fast node manager, similar to nvm)
-if ! command -v fnm >/dev/null 2>&1;then
+if [ ! -d "$FNM_PATH" ]; then
   curl -fsSL https://fnm.vercel.app/install | bash
 fi
 
@@ -31,6 +33,9 @@ FNM_PATH="${HOME}/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
   export PATH="$FNM_PATH:$PATH"
   eval "$(fnm env)"
+else
+  echo "FNM install failed. Exiting setup"
+  exit 1
 fi
 
 # install latest version of nodejs
