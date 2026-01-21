@@ -4,10 +4,10 @@ arch_setup_dir=$(dirname "$(realpath "$0")")
 base_setup_dir="${arch_setup_dir}/../.."
 
 # ensure nodejs, go, and rust are installed before calling setup
-sudo pacman -Sy --needed --noconfirm git base-devel go rustup
+sudo pacman -Sy --needed --noconfirm git base-devel go rustup unzip
 
 # only run this block if yay is NOT on your PATH
-if ! which yay >/dev/null 2>&1; then
+if ! command -v yay >/dev/null 2>&1;then
   echo "Installing yay AUR helper…"
   pushd /tmp
   if [ ! -d "yay" ]; then
@@ -19,9 +19,21 @@ if ! which yay >/dev/null 2>&1; then
   popd
 fi
 
-# install fnm (fast node manager, similar to nvm)
-yay -S --needed --noconfirm fnm
+fnm_dir="${HOME}.local/share/fnm"
+
+# Add fnm to path if its installed but not already on the path
+if [ -d "$fnm_dir" ] && ! command -v fnm >/dev/null 2>&1; then
+  export PATH="$fnm_dir"
+fi
+
+# install fnm if it isn't already
+if ! command -v brew >/dev/null 2>&1;then
+  curl -fsSL https://fnm.vercel.app/install | bash
+fi
+
 eval "$(fnm env)"
+
+# install fnm (fast node manager, similar to nvm)
 
 # install latest version of nodejs
 fnm install --latest
