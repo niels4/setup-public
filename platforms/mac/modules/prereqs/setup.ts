@@ -8,8 +8,8 @@ const homebrewUpdateRate = `export HOMEBREW_AUTO_UPDATE_SECS=43200`
 
 // Add required utilities and environment variables that all scripts can rely on
 export default async function setup() {
-  await brewBundle(import.meta.dirname)
   await ensureFile(zshenv)
+  await brewBundle(import.meta.dirname)
   await addLineToZshenv(homebrewUpdateRate)
   if (!(await shellIsSuccessful("which cargo"))) {
     await shell("rustup-init -y")
