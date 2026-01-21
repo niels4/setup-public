@@ -3,8 +3,10 @@
 arch_setup_dir=$(dirname "$(realpath "$0")")
 base_setup_dir="${arch_setup_dir}/../.."
 
-# ensure nodejs, go, and rust are installed before calling setup
-sudo pacman -Sy --needed --noconfirm git base-devel go rustup unzip
+# ensure nodejs, go, and rustup are installed before calling setup
+sudo pacman -Sy --needed --noconfirm git base-devel go unzip
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
 
 # only run this block if yay is NOT on your PATH
 if ! command -v yay >/dev/null 2>&1;then

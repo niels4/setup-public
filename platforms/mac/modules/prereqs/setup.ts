@@ -11,8 +11,5 @@ export default async function setup() {
   await ensureFile(zshenv)
   await brewBundle(import.meta.dirname)
   await addLineToZshenv(homebrewUpdateRate)
-  if (!(await shellIsSuccessful("which cargo"))) {
-    await shell("rustup-init -y")
-  }
   await sharedPrereqsSetup()
 }

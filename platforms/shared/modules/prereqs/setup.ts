@@ -1,7 +1,7 @@
 import { join } from "node:path"
 import { setupDirVar, setupRoot, sharedDir, zdotDir } from "#shared/src/constants.ts"
 import { ensureSymlink } from "#shared/src/fs.ts"
-import { addLineToZshenv, replaceZshenvVar, shell } from "#shared/src/util.ts"
+import { addLineToZshenv, replaceZshenvVar, shell, shellIsSuccessful } from "#shared/src/util.ts"
 
 const nodeVersion = process.env.NODE_VERSION
 
@@ -18,6 +18,11 @@ export default async function setup() {
   await ensureSymlink(baseVarsLink)
   await addLineToZshenv(sourceBaseVars)
   await replaceZshenvVar(setupDirVar, setupRoot)
+
+  if (!(await shellIsSuccessful("which cargo"))) {
+    await shell("rustup-init -y")
+  }
+
   await shell("rustup update")
 
   if (nodeVersion) {
