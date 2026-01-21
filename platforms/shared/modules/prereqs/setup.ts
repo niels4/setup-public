@@ -3,6 +3,8 @@ import { setupDirVar, setupRoot, sharedDir, zdotDir } from "#shared/src/constant
 import { ensureSymlink } from "#shared/src/fs.ts"
 import { addLineToZshenv, replaceZshenvVar, shell } from "#shared/src/util.ts"
 
+const nodeVersion = process.env.NODE_VERSION
+
 const baseVarsDst = join(zdotDir, "base-vars.sh")
 const sourceBaseVars = `source "${baseVarsDst}"`
 const fnmEnv = 'eval "$(fnm env --use-on-cd)"'
@@ -17,4 +19,8 @@ export default async function setup() {
   await ensureSymlink(baseVarsLink)
   await addLineToZshenv(sourceBaseVars)
   await addLineToZshenv(fnmEnv)
+  await replaceZshenvVar(setupDirVar, setupRoot)
+  if (nodeVersion) {
+    await shell(`fnm default ${nodeVersion}`)
+  }
 }

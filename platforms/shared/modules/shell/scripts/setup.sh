@@ -41,6 +41,10 @@ if [ -d .git ]; then
 
 fi
 
+export NODE_VERSION="$(node -v)"
+
 ./setup.sh
+
+fnm default latest
 
 popd
