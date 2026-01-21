@@ -29,6 +29,7 @@ alias l='ls -lah'
 
 # keybindings
 bindkey -v
+bindkey '^[[Z' reverse-menu-complete
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^y' autosuggest-accept
