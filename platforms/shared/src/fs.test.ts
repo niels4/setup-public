@@ -1,7 +1,9 @@
+import assert from "node:assert/strict"
 import fs from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { beforeAll, describe, expect, it } from "vitest"
+import { before as beforeAll, describe, it } from "node:test"
+
 import {
   checkDir,
   checkFile,
@@ -26,14 +28,16 @@ describe("shared fs", () => {
   describe("checkPathExist", () => {
     describe("when path exists", () => {
       it("should return true", async () => {
-        expect(await checkPathExists(fixturesDir)).toBe(true)
+        const result = await checkPathExists(fixturesDir)
+        assert.strictEqual(result, true)
       })
     })
 
     describe("when path doesn't exist", () => {
       it("should return false", async () => {
         const badPath = join(fixturesDir, "check-path-doesnt-exist")
-        expect(await checkPathExists(badPath)).toBe(false)
+        const result = await checkPathExists(badPath)
+        assert.strictEqual(result, false)
       })
     })
   })
@@ -48,14 +52,14 @@ describe("shared fs", () => {
 
       it("should return PathState.exists", async () => {
         const result = await checkFile(existingFile)
-        expect(result).toBe(PathState.exists)
+        assert.strictEqual(result, PathState.exists)
       })
     })
 
     describe("when file doesn't exist", () => {
       it("should return PathState.no_exists", async () => {
         const result = await checkFile(join(fixturesDir, "check-file-doesnt-exist"))
-        expect(result).toBe(PathState.no_exists)
+        assert.strictEqual(result, PathState.no_exists)
       })
     })
 
@@ -68,7 +72,7 @@ describe("shared fs", () => {
 
       it("should return PathState.wrong_type", async () => {
         const result = await checkFile(dirPath)
-        expect(result).toBe(PathState.wrong_type)
+        assert.strictEqual(result, PathState.wrong_type)
       })
     })
   })
@@ -81,7 +85,7 @@ describe("shared fs", () => {
         await createFile(newFile)
         // we've tested checkFile so we can now use it in our tests
         const fileState = await checkFile(newFile)
-        expect(fileState).toBe(PathState.exists)
+        assert.strictEqual(fileState, PathState.exists)
       })
     })
   })
@@ -98,7 +102,7 @@ describe("shared fs", () => {
         await ensureFile(existingFile)
         // we've tested checkFile so we can now use it in our tests
         const fileState = await checkFile(existingFile)
-        expect(fileState).toBe(PathState.exists)
+        assert.strictEqual(fileState, PathState.exists)
       })
     })
 
@@ -108,7 +112,7 @@ describe("shared fs", () => {
       it("should create the file", async () => {
         await ensureFile(newFile)
         const fileState = await checkFile(newFile)
-        expect(fileState).toBe(PathState.exists)
+        assert.strictEqual(fileState, PathState.exists)
       })
     })
 
@@ -118,7 +122,7 @@ describe("shared fs", () => {
       it("should recursively create parent dirs before creating file", async () => {
         await ensureFile(newFile)
         const fileState = await checkFile(newFile)
-        expect(fileState).toBe(PathState.exists)
+        assert.strictEqual(fileState, PathState.exists)
       })
     })
 
@@ -131,7 +135,7 @@ describe("shared fs", () => {
       it("should delete the non-file and create a file", async () => {
         await ensureFile(wrongTypePath)
         const fileState = await checkFile(wrongTypePath)
-        expect(fileState).toBe(PathState.exists)
+        assert.strictEqual(fileState, PathState.exists)
       })
     })
   })
@@ -140,14 +144,14 @@ describe("shared fs", () => {
     describe("when dir exists", () => {
       it("should return PathState.exists", async () => {
         const result = await checkDir(fixturesDir)
-        expect(result).toBe(PathState.exists)
+        assert.strictEqual(result, PathState.exists)
       })
     })
 
     describe("when dir doesn't exist", () => {
       it("should return PathState.no_exists", async () => {
         const result = await checkDir(join(fixturesDir, "check-dir-doesnt-exist"))
-        expect(result).toBe(PathState.no_exists)
+        assert.strictEqual(result, PathState.no_exists)
       })
     })
 
@@ -161,7 +165,7 @@ describe("shared fs", () => {
 
       it("should return PathState.wrong_type", async () => {
         const result = await checkDir(filePath)
-        expect(result).toBe(PathState.wrong_type)
+        assert.strictEqual(result, PathState.wrong_type)
       })
     })
   })
@@ -172,7 +176,7 @@ describe("shared fs", () => {
         await ensureDir(fixturesDir)
         // we've tested checkDir so we can now use it in our tests
         const dirState = await checkDir(fixturesDir)
-        expect(dirState).toBe(PathState.exists)
+        assert.strictEqual(dirState, PathState.exists)
       })
     })
 
@@ -182,7 +186,7 @@ describe("shared fs", () => {
       it("should create the directory", async () => {
         await ensureDir(newDir)
         const dirState = await checkDir(newDir)
-        expect(dirState).toBe(PathState.exists)
+        assert.strictEqual(dirState, PathState.exists)
       })
     })
 
@@ -192,7 +196,7 @@ describe("shared fs", () => {
       it("should recursively create parent dirs before creating dir", async () => {
         await ensureDir(newDir)
         const dirState = await checkDir(newDir)
-        expect(dirState).toBe(PathState.exists)
+        assert.strictEqual(dirState, PathState.exists)
       })
     })
 
@@ -205,7 +209,7 @@ describe("shared fs", () => {
       it("should delete the file and create a directory", async () => {
         await ensureDir(wrongTypePath)
         const dirState = await checkDir(wrongTypePath)
-        expect(dirState).toBe(PathState.exists)
+        assert.strictEqual(dirState, PathState.exists)
       })
     })
 
@@ -220,7 +224,7 @@ describe("shared fs", () => {
       it("should delete the file and recursively create the directory", async () => {
         await ensureDir(newDir)
         const dirState = await checkDir(newDir)
-        expect(dirState).toBe(PathState.exists)
+        assert.strictEqual(dirState, PathState.exists)
       })
     })
   })
@@ -238,7 +242,7 @@ describe("shared fs", () => {
 
         it("should return PathState.exists", async () => {
           const linkState = await checkSymlink(src, dst)
-          expect(linkState).toBe(PathState.exists)
+          assert.strictEqual(linkState, PathState.exists)
         })
       })
 
@@ -255,7 +259,7 @@ describe("shared fs", () => {
 
         it("should return PathState.wrong_type", async () => {
           const linkState = await checkSymlink(src, dst)
-          expect(linkState).toBe(PathState.wrong_type)
+          assert.strictEqual(linkState, PathState.wrong_type)
         })
       })
     })
@@ -271,7 +275,7 @@ describe("shared fs", () => {
 
       it("should return PathState.wrong_type", async () => {
         const linkState = await checkSymlink(src, dst)
-        expect(linkState).toBe(PathState.wrong_type)
+        assert.strictEqual(linkState, PathState.wrong_type)
       })
     })
 
@@ -285,7 +289,7 @@ describe("shared fs", () => {
 
       it("should return PathState.no_exists", async () => {
         const linkState = await checkSymlink(src, dst)
-        expect(linkState).toBe(PathState.no_exists)
+        assert.strictEqual(linkState, PathState.no_exists)
       })
     })
   })
@@ -304,7 +308,7 @@ describe("shared fs", () => {
         it("should do nothing", async () => {
           await ensureSymlink({ src, dst })
           const linkState = await checkSymlink(src, dst)
-          expect(linkState).toBe(PathState.exists)
+          assert.strictEqual(linkState, PathState.exists)
         })
       })
 
@@ -322,7 +326,7 @@ describe("shared fs", () => {
         it("should recreate the link with the correct src", async () => {
           await ensureSymlink({ src, dst })
           const linkState = await checkSymlink(src, dst)
-          expect(linkState).toBe(PathState.exists)
+          assert.strictEqual(linkState, PathState.exists)
         })
       })
     })
@@ -339,7 +343,7 @@ describe("shared fs", () => {
       it("should delete the file and create the symlink", async () => {
         await ensureSymlink({ src, dst })
         const linkState = await checkSymlink(src, dst)
-        expect(linkState).toBe(PathState.exists)
+        assert.strictEqual(linkState, PathState.exists)
       })
     })
 
@@ -354,7 +358,7 @@ describe("shared fs", () => {
       it("should create the symlink and any necessary parent directories", async () => {
         await ensureSymlink({ src, dst })
         const linkState = await checkSymlink(src, dst)
-        expect(linkState).toBe(PathState.exists)
+        assert.strictEqual(linkState, PathState.exists)
       })
     })
   })
@@ -372,7 +376,7 @@ describe("shared fs", () => {
       it("should replace the existing file with the src file", async () => {
         await copy_rf({ src, dst })
         const fileContents = (await fs.readFile(dst)).toString()
-        expect(fileContents).toBe("Source File Content")
+        assert.strictEqual(fileContents, "Source File Content")
       })
     })
   })
