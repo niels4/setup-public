@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
 # exit when any command fails
 set -e
@@ -41,10 +41,10 @@ if [ -d .git ]; then
 
 fi
 
-export NODE_VERSION="$(node -v)"
+NODE_VERSION="$(node -v)"
+
+export NODE_VERSION
 
 ./setup.sh
-
-fnm default latest
 
 popd

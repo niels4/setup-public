@@ -7,7 +7,6 @@ const nodeVersion = process.env.NODE_VERSION
 
 const baseVarsDst = join(zdotDir, "base-vars.sh")
 const sourceBaseVars = `source "${baseVarsDst}"`
-const fnmEnv = 'eval "$(fnm env --use-on-cd)"'
 
 const baseVarsLink = {
   src: join(sharedDir, "base-vars.sh"),
@@ -18,11 +17,10 @@ const baseVarsLink = {
 export default async function setup() {
   await ensureSymlink(baseVarsLink)
   await addLineToZshenv(sourceBaseVars)
-  await addLineToZshenv(fnmEnv)
   await replaceZshenvVar(setupDirVar, setupRoot)
   await shell("rustup update")
 
   if (nodeVersion) {
-    await shell(`fnm default ${nodeVersion}`)
+    await shell(`fnm use ${nodeVersion}`)
   }
 }

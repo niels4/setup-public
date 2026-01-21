@@ -42,6 +42,4 @@ done
 # setup shell for rust development
 source $XDG_DATA_HOME/cargo/env
 
-# For some reason this wasn't working when running from ~/.zshenv when in a tmux session
-# adding it back here fixes that
-eval "$(fnm env --use-on-cd)"
+eval "$(fnm env --use-on-cd --shell zsh)"
