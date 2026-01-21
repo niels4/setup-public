@@ -1,17 +1,19 @@
 import { join } from "node:path"
-import { preferencesDir } from "#mac/mac-constants.ts"
 import { brewBundle } from "#mac/mac-util.ts"
+import { homedir } from "#shared/src/constants.ts"
 import { copy_rf } from "#shared/src/fs.ts"
 
-const plistFile = "com.googlecode.iterm2.plist"
+const profilesFile = "Profiles.json"
 const __dirname = import.meta.dirname
 
-const iterm2PlistLink = {
-  src: join(__dirname, plistFile),
-  dst: join(preferencesDir, plistFile),
+const dynamicProfilesDir = join(homedir, "Library", "Application Support", "iTerm2", "DynamicProfiles")
+
+const iterm2ProfilesLink = {
+  src: join(__dirname, profilesFile),
+  dst: join(dynamicProfilesDir, profilesFile),
 }
 
 export default async function setup() {
   await brewBundle(__dirname)
-  await copy_rf(iterm2PlistLink)
+  await copy_rf(iterm2ProfilesLink)
 }
