@@ -1,5 +1,8 @@
 return {
 
+  -- This file isn't used too much because most of the linting applications also have LSP interfaces.
+  -- Its still useful to keep around for when you have linter with a cli but no lsp.
+
   { -- Linting
     'mfussenegger/nvim-lint',
     event = { 'BufReadPre', 'BufNewFile' },

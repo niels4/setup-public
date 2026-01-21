@@ -1,7 +1,7 @@
+import { join } from "node:path"
 import { homedir, zshAutorunDir } from "#shared/src/constants.ts"
 import { ensureSymlink } from "#shared/src/fs.ts"
 import { addLineToZshenv } from "#shared/src/util.ts"
-import { join } from "path"
 
 const __dirname = import.meta.dirname
 

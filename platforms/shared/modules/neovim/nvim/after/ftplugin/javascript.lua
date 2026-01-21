@@ -1,4 +1,4 @@
-local lsp_util = require 'custom.util.lsp'
+local lsp_util = require 'user.util.lsp'
 
 vim.keymap.set({ 'n' }, '<space>cs', function()
   vim.cmd 'LspTypescriptSourceAction'

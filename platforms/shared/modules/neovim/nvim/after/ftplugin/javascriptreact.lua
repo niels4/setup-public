@@ -1,2 +1,2 @@
-local ftplugin = require 'custom.util.ftplugin'
+local ftplugin = require 'user.util.ftplugin'
 ftplugin.extend 'javascript'
