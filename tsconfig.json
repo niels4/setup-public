@@ -1,13 +1,30 @@
 {
   "compilerOptions": {
-    "strict": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
     "paths": {
       "#shared/*": ["./platforms/shared/*"],
       "#arch/*": ["./platforms/arch/*"],
       "#mac/*": ["./platforms/mac/*"]
     },
+
+    "composite": true,
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "types": ["node"],
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
     "noEmit": true,
-    "module": "nodenext",
-    "allowImportingTsExtensions": true
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
   }
 }
