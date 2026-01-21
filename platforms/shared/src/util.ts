@@ -63,7 +63,7 @@ export const shellIsSuccessful = async (command: string, options?: ShellOptions)
 // uses exact string matching
 export const fileContainsText = async (file: string, text: string) => {
   const escapedText = escapeDoubleQuotes(escapeDollarSigns(text))
-  return shellIsSuccessful(`rg --fixed-strings "${escapedText}" ${file}`)
+  return shellIsSuccessful(`rg --fixed-strings "${escapedText}" ${file}`, { silent: true })
 }
 
 // uses exact string matching
