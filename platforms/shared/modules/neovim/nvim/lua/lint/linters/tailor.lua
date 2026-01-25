@@ -1,7 +1,9 @@
--- local lint = require 'lint'
+--- tailor is a cross-platform static analyzer and linter for Swift.
+--- https://github.com/sleekbyte/tailor
 
 ---  Example tailor json output
 
+-- {
 --   "files": [
 --     {
 --       "path": "/path/to/filename.swift",
