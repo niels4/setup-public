@@ -2,6 +2,9 @@ import { type DevEnvironments, runSetup } from "#shared/src/runner.ts"
 
 const platform = "mac"
 
+// modules can be installed one at a time by setting the SETUP_MODULE env variable
+// SETUP_MODULE=swift setup
+
 const defaultModules = [
   "prereqs",
   "ssh",
@@ -10,21 +13,29 @@ const defaultModules = [
   "git",
   "neovim",
   "iterm2",
+  // can reference shared modules directly with "shared:" prefix
   "shared:webdev",
   "lua",
+  "shared:go",
   "dev-misc",
   "python",
 ]
 
-// can reference shared modules directly with "shared:" prefix
-const extras = [...defaultModules, "shared:extras"]
-
+// $SETUP_ENV var determines which set of modules is run
 const devEnvironments: DevEnvironments = {
+  // default env run when SETUP_ENV is not defined
   default: defaultModules,
 
-  // install extra tools by setting your SETUP_ENV environment variable
   // SETUP_ENV=extras setup
-  extras,
+  extras: [
+    // extend the default set of modules with extra tools that we may not want installed by every time
+    ...defaultModules,
+    // optional cli tools
+    "shared:extras",
+  ],
+
+  // SETUP_ENV=minimal setup
+  minimal: ["prereqs", "ssh", "shell", "shell-tools", "git", "neovim"],
 }
 
 await runSetup({ platform, devEnvironments })
