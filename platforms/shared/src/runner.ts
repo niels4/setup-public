@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { join } from "node:path"
-import { bold, checkmark, green, platformsDir, red, reset, setupEnvVar } from "./constants.ts"
+import { bold, checkmark, green, platformsDir, red, reset, setupEnvVar, setupModuleVar } from "./constants.ts"
 
 const getImportPath = (platform: string, moduleName: string) =>
   join(platformsDir, platform, "modules", moduleName, "setup.ts")
@@ -19,7 +19,8 @@ export type RunSetupArgs = {
 
 export const runSetup = async ({ platform, devEnvironments }: RunSetupArgs) => {
   const setupEnv = process.env[setupEnvVar] ?? "default"
-  const modules = devEnvironments[setupEnv]
+  const setupModule = process.env[setupModuleVar] ?? null
+  const modules = setupModule ? [setupModule] : devEnvironments[setupEnv]
   if (!modules) {
     console.log(`${red}${bold}Invalid var ${setupEnvVar}: ${setupEnv}${reset}`)
     console.log("Allowed SETUP_ENV values:", Object.keys(devEnvironments).join(", "))
