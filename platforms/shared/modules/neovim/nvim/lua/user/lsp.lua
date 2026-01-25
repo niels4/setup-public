@@ -20,6 +20,10 @@ local servers = {
   -- -- bash
   -- go
   'gopls',
+
+  -- rust
+  'rust_analyzer',
+
   'bashls',
 
   -- markdown
