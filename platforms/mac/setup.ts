@@ -32,6 +32,8 @@ const devEnvironments: DevEnvironments = {
     ...defaultModules,
     // optional cli tools
     "shared:extras",
+    // install tools for swift development only as an extra
+    "swift",
   ],
 
   // SETUP_ENV=minimal setup

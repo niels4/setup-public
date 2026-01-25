@@ -1,0 +1,4 @@
+brew "xcodes"
+brew "tailor"
+brew "swift"
+brew "swift-format"

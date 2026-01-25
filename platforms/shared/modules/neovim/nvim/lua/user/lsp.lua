@@ -17,13 +17,16 @@ local servers = {
   'pyright',
   'ruff',
 
-  -- -- bash
   -- go
   'gopls',
 
   -- rust
   'rust_analyzer',
 
+  -- swift
+  'sourcekit',
+
+  -- bash
   'bashls',
 
   -- markdown
