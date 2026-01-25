@@ -18,6 +18,8 @@ local servers = {
   'ruff',
 
   -- -- bash
+  -- go
+  'gopls',
   'bashls',
 
   -- markdown
