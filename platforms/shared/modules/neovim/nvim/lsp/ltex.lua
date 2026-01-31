@@ -33,22 +33,22 @@ local language_id_mapping = {
 }
 
 local filetypes = {
-  'bib',
+  -- 'bib',
   'gitcommit',
   'markdown',
-  'org',
-  'plaintex',
-  'rst',
-  'rnoweb',
+  -- 'org',
+  -- 'plaintex',
+  -- 'rst',
+  -- 'rnoweb',
   'tex',
   'pandoc',
   'quarto',
   'rmd',
   'context',
-  'html',
-  'xhtml',
+  -- 'html',
+  -- 'xhtml',
   'mail',
-  'text',
+  -- 'text',
 }
 
 local function get_language_id(_, filetype)

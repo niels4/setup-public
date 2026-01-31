@@ -29,14 +29,14 @@ local servers = {
   -- bash
   'bashls',
 
-  -- markdown
-  'ltex',
-
   -- yaml
   'yamlls',
 
   -- toml
   'taplo',
+
+  -- spell check
+  -- 'ltex',
 }
 
 lazy_util.run_after_loaded('blink.cmp', function()
