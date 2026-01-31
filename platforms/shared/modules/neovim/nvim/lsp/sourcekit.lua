@@ -7,7 +7,9 @@
 ---@type vim.lsp.Config
 return {
   cmd = { 'sourcekit-lsp' },
+
   filetypes = { 'swift', 'objc', 'objcpp', 'c', 'cpp' },
+
   root_dir = function(bufnr, on_dir)
     local root_markers = { 'Package.swift' }
     local project_root = vim.fs.root(bufnr, root_markers)
@@ -16,10 +18,12 @@ return {
     end
     on_dir(project_root)
   end,
+
   get_language_id = function(_, ftype)
     local t = { objc = 'objective-c', objcpp = 'objective-cpp' }
     return t[ftype] or ftype
   end,
+
   capabilities = {
     workspace = {
       didChangeWatchedFiles = {
@@ -33,4 +37,10 @@ return {
       },
     },
   },
+
+  on_attach = function(client, _)
+    -- Disable ALL formatting from sourcekit-lsp
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 }
