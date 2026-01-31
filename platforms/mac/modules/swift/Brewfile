@@ -1,4 +1,15 @@
+# aria2 used by xcodes for faster downloads of xcode installers
+brew "aria2"
+
+# xcodes (plural) used to download and install multiple versions of xcode (faster than using apple store installer)
 brew "xcodes"
-brew "tailor"
-brew "swift"
+
+# manage multiple version of swift. Define swift version in project with a .swift-version file
+brew "swiftly"
+
+# swift formatter
 brew "swift-format"
+
+# swiftlint requires xcode to be installed. Use 'xcodes install --latest',
+# follow the installation instructions and then run the swift setup again 'SETUP_MODULE=swift setup'
+# brew "swiftlint"
