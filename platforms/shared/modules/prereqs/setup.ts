@@ -20,7 +20,7 @@ export default async function setup() {
   await replaceZshenvVar(setupDirVar, setupRoot)
 
   if (!(await shellIsSuccessful("which cargo"))) {
-    await shell("rustup-init -y")
+    await shell("rustup-init -y --no-modify-path")
   }
 
   await shell("rustup update")

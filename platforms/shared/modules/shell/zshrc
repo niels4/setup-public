@@ -34,17 +34,10 @@ bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^y' autosuggest-accept
 
+eval "$(fnm env --use-on-cd --shell zsh)"
+
 # source all files in autorun dir
 for file in ${ZDOTDIR}/zshrc.d/*.sh; do
   source "$file"
 done
 
-# setup shell for rust development
-source $XDG_DATA_HOME/cargo/env
-
-# add fnm to the path if it is installed but not already on the path
-FNM_PATH="${HOME}/.local/share/fnm"
-if [ -d "$FNM_PATH" ] && ! command -v fnm >/dev/null 2>&1; then
-  export PATH="$FNM_PATH:$PATH"
-fi
-eval "$(fnm env --use-on-cd --shell zsh)"
