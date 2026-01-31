@@ -41,6 +41,7 @@ return {
         json = biome_or_prettier,
         jsonc = biome_or_prettier,
         python = { 'isort', 'black' },
+        swift = { 'swift_format' },
       },
     },
   },

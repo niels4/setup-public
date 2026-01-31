@@ -13,7 +13,7 @@ return {
         markdown = { 'markdownlint' },
         go = { 'staticcheck' },
         rust = { 'clippy' },
-        swift = { 'tailor' },
+        swift = { 'swiftlint' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
