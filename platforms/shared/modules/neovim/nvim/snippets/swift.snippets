@@ -12,3 +12,9 @@ snippet fun "function"
 	func ${1:name}(${2: args}) -> ${3:type} {
 		$0
 	}
+
+snippet sldn "swiftlint disable next"
+	// swiftlint:disable:next ${1:identifier_name}$0
+
+snippet sldt "swiftlint disable this"
+	// swiftlint:disable:this ${1:identifier_name}$0
