@@ -55,3 +55,5 @@ node setup.ts
 
 # return user back to the directory they were in
 popd
+
+exit 0
