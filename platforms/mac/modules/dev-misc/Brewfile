@@ -1,2 +1,3 @@
 brew "shellcheck"
 brew "ltex-ls"
+brew "direnv"
