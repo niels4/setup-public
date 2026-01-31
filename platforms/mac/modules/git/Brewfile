@@ -1,4 +1,5 @@
 brew "git"
+brew "gh"
 brew "git-lfs"
 brew "lazygit"
 cask "fork"
