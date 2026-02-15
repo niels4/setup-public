@@ -1,24 +1,24 @@
 #!/usr/bin/env zsh
+set -euo pipefail
 
 arch_setup_dir=$(dirname "$(realpath "$0")")
 base_setup_dir="${arch_setup_dir}/../.."
 
+. $base_setup_dir/platforms/shared/base-vars.sh
+
 # ensure nodejs, go, and rustup are installed before calling setup
-sudo pacman -Sy --needed --noconfirm git base-devel go unzip
+sudo pacman -Sy --needed --noconfirm git base-devel go unzip rustup
 
-if ! command -v cargo >/dev/null 2>&1; then
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
+if ! cargo --version >/dev/null 2>&1; then
+  rustup default stable
 fi
-. "${HOME}/.local/share/cargo/env"
 
-# only run this block if paru is NOT on your PATH
 if ! command -v paru >/dev/null 2>&1; then
-  echo "Installing paru AUR helper…"
-  paru_build_dir="/tmp/paru"
-  if [ ! -d "$paru_build_dir" ]; then
-    git clone https://aur.archlinux.org/paru.git "$paru_build_dir"
-  fi
-  (cd "$paru_build_dir" && makepkg -si --noconfirm)
+  (
+    git clone https://aur.archlinux.org/paru.git $XDG_DATA_HOME/paru
+    cd $XDG_DATA_HOME/paru
+    makepkg -si --noconfirm
+  )
 fi
 
 # install mise for managing nodejs versions

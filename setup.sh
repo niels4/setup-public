@@ -12,6 +12,7 @@ if [ "$(uname)" = "Darwin" ]; then
 
 elif pacman -h > /dev/null 2>&1; then
   echo "Platform is arch"
+  sudo pacman -Sy --needed --noconfirm zsh
   "${setup_dir}/platforms/arch/setup.sh"
 
 elif apt-get -h > /dev/null 2>&1; then
