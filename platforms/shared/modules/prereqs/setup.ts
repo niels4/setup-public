@@ -42,6 +42,9 @@ export default async function setup() {
   await replaceZshenvVar(devDirVar, devDir)
 
   if (!(await shellIsSuccessful("cargo --version"))) {
+    if (await shellIsSuccessful("which rustup-init")) {
+      await shell("rustup-init -y --no-modify-path")
+    }
     await shell("rustup default stable")
   } else {
     await shell("rustup update")
