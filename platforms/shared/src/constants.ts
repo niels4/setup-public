@@ -4,10 +4,12 @@ import { join } from "node:path"
 export const setupEnvVar = "SETUP_ENV"
 export const setupModuleVar = "SETUP_MODULE"
 export const setupDirVar = "SETUP_DIR"
+export const devDirVar = "DEV_DIR"
 
 export const sharedDir = join(import.meta.dirname, "..")
 export const platformsDir = join(sharedDir, "..")
 export const setupRoot = join(platformsDir, "..")
+export const devDir = join(setupRoot, "..")
 
 export const host = hostname()
 export const { homedir, username } = userInfo()
@@ -16,6 +18,7 @@ export const configHome = join(homedir, ".config")
 export const zshenv = join(homedir, ".zshenv")
 export const zdotDir = join(configHome, "zsh")
 export const zshAutorunDir = join(zdotDir, "zshrc.d")
+export const defaultNpmPackagesFile = join(configHome, "mise", "default-npm-packages")
 
 export const red = "\u{001B}[31m"
 export const green = "\u{001B}[32m"

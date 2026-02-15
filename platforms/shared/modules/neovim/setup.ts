@@ -1,7 +1,7 @@
 import { join } from "node:path"
 import { homedir, zshAutorunDir } from "#shared/src/constants.ts"
 import { ensureSymlink } from "#shared/src/fs.ts"
-import { addLineToZshenv } from "#shared/src/util.ts"
+import { npm, replaceZshenvVar } from "#shared/src/util.ts"
 
 const __dirname = import.meta.dirname
 
@@ -18,6 +18,7 @@ const nvimZshConfigLink = {
 export default async function setup() {
   await ensureSymlink(nvimDirLink)
   await ensureSymlink(nvimZshConfigLink)
-  await addLineToZshenv("export EDITOR=nvim")
-  await addLineToZshenv("export MANPAGER='nvim +Man!'")
+  await replaceZshenvVar("EDITOR", "nvim")
+  await replaceZshenvVar("MANPAGER", "'nvim +Man!'")
+  await npm("markdownlint-cli")
 }

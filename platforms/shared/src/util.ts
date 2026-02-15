@@ -2,7 +2,7 @@ import { spawn } from "node:child_process"
 import { randomBytes } from "node:crypto"
 import type { Stream } from "node:stream"
 import { promisify } from "node:util"
-import { username, zshenv } from "./constants.ts"
+import { defaultNpmPackagesFile, username, zshenv } from "./constants.ts"
 import { read } from "./read.ts"
 
 const randomBytesAsync = promisify(randomBytes)
@@ -26,7 +26,7 @@ type ShellOptions = {
 }
 
 export const shell = async (command: string, options?: ShellOptions): Promise<string> => {
-  command = `source ${zshenv}; ${command}`
+  command = `. ${zshenv}; ${command}`
   const cp = spawn(command, { shell: true })
   if (!options?.silent) {
     cp.stdout.pipe(process.stdout)
@@ -155,4 +155,14 @@ export const readNewPassword = async (promptIn: string = "Enter new password: ",
   }
 
   return password
+}
+
+export const npm = async (packagesStr: string): Promise<void> => {
+  const packageNames = packagesStr.split(/\s/)
+
+  for (const packageName of packageNames) {
+    if (!(await fileContainsText(defaultNpmPackagesFile, packageName))) {
+      await shell(`echo "${packageName}" >> ${defaultNpmPackagesFile}`)
+    }
+  }
 }

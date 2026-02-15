@@ -19,6 +19,7 @@ const defaultModules = [
   "shared:go",
   "dev-misc",
   "python",
+  "dev-container",
 ]
 
 // $SETUP_ENV var determines which set of modules is run

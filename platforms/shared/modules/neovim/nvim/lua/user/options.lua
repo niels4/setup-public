@@ -26,6 +26,7 @@ local options = {
   ignorecase = true, -- ignore case in search patterns
   inccommand = 'split',
   list = true,
+  listchars = { tab = '» ', trail = '·', nbsp = '␣' },
   mouse = 'a', -- allow the mouse to be used in neovim
   mousemodel = 'extend', -- allow the mouse to be used in neovim
   number = true, -- set numbered lines
@@ -55,9 +56,12 @@ local options = {
 }
 
 for k, v in pairs(options) do
-  vim.o[k] = v
+  vim.opt[k] = v
 end
 
---  Notice listchars is set using `vim.opt` instead of `vim.o`.
---  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+-- add filetypes neovim doesnt automatically detect
+vim.filetype.add({
+  extension = {
+    ne = "nearley",
+  },
+})

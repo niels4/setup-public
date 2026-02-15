@@ -1,2 +1,3 @@
+brew "bash" # keep a modern version of bash handy
 brew "tmux"
 brew "fzf"

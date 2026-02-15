@@ -1,5 +1,2 @@
 brew "python"
-brew "isort"
-brew "black"
-brew "ruff"
 brew "pipx"

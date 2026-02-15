@@ -91,7 +91,7 @@ echo ${SET_HOSTNAME} > /mnt/etc/hostname
 # install packages:
 
 # core:
-pacstrap -K /mnt base linux linux-firmware sudo which
+pacstrap -K /mnt base linux linux-firmware sudo which zsh
 
 # keyring for archlinux arm
 pacstrap -K /mnt archlinuxarm-keyring

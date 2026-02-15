@@ -5,7 +5,7 @@ import { bold, checkmark, green, platformsDir, red, reset, setupEnvVar, setupMod
 const getImportPath = (platform: string, moduleName: string) =>
   join(platformsDir, platform, "modules", moduleName, "setup.ts")
 
-export type SupportedPlatform = "arch" | "mac"
+export type SupportedPlatform = "arch" | "mac" | "container"
 
 export type DevEnvironments = {
   default: string[] // default dev environment required

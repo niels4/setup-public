@@ -1,4 +1,4 @@
-import { shell } from "#shared/src/util.ts"
+import { npm } from "#shared/src/util.ts"
 
 // intall language servers needed for web development
 
@@ -11,5 +11,5 @@ const npmPackages = [
 ]
 
 export default async function setup() {
-  await shell(`npm install -g ${npmPackages.join(" ")}`)
+  await npm(`${npmPackages.join(" ")}`)
 }

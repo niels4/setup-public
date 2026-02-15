@@ -1,6 +1,10 @@
 [init]
 	defaultBranch = main
 
+[core]
+	fsmonitor = true
+	untrackedcache = true
+
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true

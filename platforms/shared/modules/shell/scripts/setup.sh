@@ -7,6 +7,8 @@ trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 # echo an error message before exiting
 trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
+export NODE_VERSION="$(node -v)"
+
 SETUP_DIR=${SETUP_DIR:-~/setup}
 
 if ! pushd "$SETUP_DIR" >/dev/null 2>&1; then
@@ -40,10 +42,6 @@ if [ -d .git ]; then
   fi
 
 fi
-
-NODE_VERSION="$(node -v)"
-
-export NODE_VERSION
 
 ./setup.sh
 

@@ -1,5 +1,4 @@
-#!/usr/bin/env sh
-
+#!/usr/bin/env zsh
 mac_setup_dir="$(dirname "$(realpath "$0")")"
 base_setup_dir="${mac_setup_dir}/../.."
 
@@ -16,26 +15,22 @@ if ! command -v brew >/dev/null 2>&1;then
   exit 1
 fi
 
-# install fnm (fast node manager, similar to nvm)
-brew install fnm
-eval "$(fnm env)"
+# install mise for managing nodejs versions
+brew install mise
+eval "$(mise activate zsh)"
 
-# install latest version of nodejs
-fnm install --latest
-fnm default latest
+echo 'activated'
 
 # install and use version specified in .node-version file to run setup script
-fnm install "$(cat "${base_setup_dir}"/.node-version)"
-fnm use "$(cat "${base_setup_dir}"/.node-version)"
+mise shell node@"$(cat "${base_setup_dir}"/.node-version)"
 
-# cd into setup_dir
-pushd "${mac_setup_dir}"
-
-# run setup script
-npm install
-node setup.ts
-
-# return user back to the directory they were in
-popd
+(
+  cd "${mac_setup_dir}" || exit 1
+  npm install
+  node setup.ts
+  # Install all your default packages at once
+  xargs -r npm install -g < "${MISE_NODE_DEFAULT_PACKAGES_FILE}"
+  mise install node@latest # wait until after default-npm-packages-file is created to install latest node
+) || exit 1 
 
 exit 0

@@ -1,0 +1,9 @@
+[env]
+MISE_NODE_COREPACK = "true"
+
+[tools]
+"aqua:LuaLS/lua-language-server" = "latest"
+node = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node"]

@@ -3,4 +3,3 @@
 brew "neovim"
 brew "tree-sitter-cli"
 brew "unzip"
-brew "markdownlint-cli"

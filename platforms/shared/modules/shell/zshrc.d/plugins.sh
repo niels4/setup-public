@@ -10,14 +10,11 @@ export FZF_CTRL_T_OPTS="--preview 'bat --color=always -n --line-range :500 {}'"
 eval "$(fzf --zsh)"
 
 # zinit
-ZSH_THEME="kphoen"
 zstyle ':omz:alpha:lib:git' async-prompt no
 
 # Must Load OMZ Git library
 zinit snippet OMZL::git.zsh
 
-# Load Git plugin from OMZ
-zinit snippet OMZP::git
 zinit cdclear -q # <- forget completions provided up to this moment
 
 # use oh-my-zsh kphoen theme
@@ -28,13 +25,13 @@ zinit snippet OMZT::kphoen
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
-# zinit light Aloxaf/fzf-tab
 zinit snippet OMZP::sudo
-zinit snippet OMZP::archlinux
-zinit snippet OMZP::aws
-zinit snippet OMZP::kubectl
-zinit snippet OMZP::kubectx
 zinit snippet OMZP::command-not-found
+# zinit light Aloxaf/fzf-tab
+# zinit snippet OMZP::archlinux
+# zinit snippet OMZP::aws
+# zinit snippet OMZP::kubectl
+# zinit snippet OMZP::kubectx
 
 # Load completions
 autoload -Uz compinit && compinit

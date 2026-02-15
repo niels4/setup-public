@@ -5,7 +5,7 @@ export const pacman = (packages: string) => {
 }
 
 export const aur = (packages: string) => {
-  return shell(`yay --needed --noconfirm -S ${packages}`)
+  return shell(`paru --needed --noconfirm -S ${packages}`)
 }
 
 export const savePassSecret = async (key: string, secret: string) => {

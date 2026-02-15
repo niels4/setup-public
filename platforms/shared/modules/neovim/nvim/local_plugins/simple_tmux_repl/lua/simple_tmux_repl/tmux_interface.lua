@@ -41,8 +41,10 @@ local send_text = function(target, text)
     return
   end
   local escapedText = escape_shell_chars(text)
-  local cmd = 'tmux send-keys -t ' .. target .. ' "' .. escapedText .. '" C-m'
-  shell(cmd)
+  local cmd1 = 'tmux send-keys -t ' .. target .. ' "' .. escapedText .. '"'
+  local cmd2 = 'tmux send-keys -t ' .. target .. ' Enter'
+  shell(cmd1)
+  shell(cmd2)
 end
 
 local joined_window = nil

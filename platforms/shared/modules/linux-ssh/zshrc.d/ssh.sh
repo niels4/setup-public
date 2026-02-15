@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 # use keychain as the ssh-agent
 # set SSH_AUTH_SOCK and SSH_AGENT_PID using keychain
 mkdir -p "${XDG_STATE_HOME}/keychain"

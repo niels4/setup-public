@@ -6,6 +6,11 @@ export XDG_STATE_HOME="${HOME}/.local/state"
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 export ZINIT_HOME="${XDG_DATA_HOME}/zinit/zinit.git"
 
+case ":$PATH:" in
+  *":$HOME/.local/bin:"*) ;;
+  *) PATH="$HOME/.local/bin:$PATH" ;;
+esac
+
 export GOPATH="${XDG_DATA_HOME}/go"
 
 case ":$PATH:" in
@@ -21,7 +26,9 @@ case ":$PATH:" in
   *) PATH="$CARGO_HOME/bin:$PATH" ;;
 esac
 
-export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
 export NPM_CONFIG_CACHE="${XDG_CACHE_HOME}/npm"
+export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
+export NODE_REPL_HISTORY="${XDG_DATA_HOME}/node/node_repl_history"
+export MISE_NODE_DEFAULT_PACKAGES_FILE="${XDG_CONFIG_HOME}/mise/default-npm-packages"
 
 export PATH

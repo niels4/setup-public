@@ -6,6 +6,6 @@ TRAPUSR1() {
   if [[ -o INTERACTIVE ]]; then
      {echo; echo "execute a new shell instance" } 1>&2
      source ~/.zshenv
-     exec "${SHELL}"
+     exec /bin/zsh
   fi
 }

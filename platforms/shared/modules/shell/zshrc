@@ -3,7 +3,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 # aliases
 
-# alias rzsh defined in ./autorun/reload_all_zsh.sh
+# alias rzsh defined in ./zshrc.d/reload_all_zsh.sh
 
 # run setup
 alias setup="~/s/setup.sh; rzsh"
@@ -14,6 +14,9 @@ alias shelldev="~/s/shelldev"
 
 # quickly edit zsh config
 alias ezsh="nvim $ZDOTDIR/.zshrc"
+
+# install default npm globals for current version of nodejs
+alias npm-globals='xargs -r npm install -g < "${MISE_NODE_DEFAULT_PACKAGES_FILE}"'
 
 # print gist by name
 # example: print-gist niels4 setup-public-github.sh
@@ -26,6 +29,7 @@ alias eval-gist="bash -c \"\$(~/s/print-gist.sh)\""
 # other aliases
 alias ls='ls --color'
 alias l='ls -lah'
+alias github-test-ssh='ssh -T git@github.com'
 
 # keybindings
 bindkey -v
@@ -34,10 +38,9 @@ bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^y' autosuggest-accept
 
-eval "$(fnm env --use-on-cd --shell zsh)"
-
 # source all files in autorun dir
 for file in ${ZDOTDIR}/zshrc.d/*.sh; do
   source "$file"
 done
 
+eval "$(mise activate zsh --shims)"

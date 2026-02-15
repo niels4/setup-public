@@ -1,0 +1,2 @@
+[directories]
+cache_dir = "/usr/local/share/tealdeer" # Global tealdeer cache
