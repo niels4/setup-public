@@ -10,8 +10,8 @@ ARG USERNAME=niels
 # Package categoreies
 ARG CORE="locales sudo less vim-tiny nano procps tree expect ca-certificates curl wget unzip"
 ARG DOCS="man-db manpages manpages-dev info doc-debian"
-ARG SSH="openssh-client openssh-server keychain pass gnupg"
-ARG GIT="git git-lfs gh"
+ARG SSH_TOOLS="openssh-client openssh-server keychain pass gnupg"
+ARG GIT_TOOLS="git git-lfs gh"
 ARG SHELL_TOOLS="zsh tmux fzf ripgrep fd-find jq direnv zoxide bat shellcheck"
 ARG GO_TOOLS="golang"
 ARG RUST_TOOLS="rustup"
@@ -22,8 +22,8 @@ ARG LUA_TOOLS="luajit"
 RUN apt-get update && apt-get install -y \
       $CORE \
       $DOCS \
-      $SSH \
-      $GIT \
+      $SSH_TOOLS \
+      $GIT_TOOLS \
       $SHELL_TOOLS \
       $GO_TOOLS \
       $RUST_TOOLS \

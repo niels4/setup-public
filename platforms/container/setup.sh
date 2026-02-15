@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+set -euo pipefail
 
 container_setup_dir=$(dirname "$(realpath "$0")")
 base_setup_dir="${container_setup_dir}/../.."

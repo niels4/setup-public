@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+set -euo pipefail
 mac_setup_dir="$(dirname "$(realpath "$0")")"
 base_setup_dir="${mac_setup_dir}/../.."
 
