@@ -5,7 +5,7 @@
 FROM debian:stable-slim
 
 # Override with your own username: container build --build-arg USERNAME=$(whoami) --tag dev-container .
-ARG USERNAME=niels
+ARG USERNAME=dev
 
 # Package categoreies
 ARG CORE="locales sudo less vim-tiny nano procps tree expect ca-certificates curl wget unzip"
@@ -13,6 +13,7 @@ ARG DOCS="man-db manpages manpages-dev info doc-debian"
 ARG SSH_TOOLS="openssh-client openssh-server keychain pass gnupg"
 ARG GIT_TOOLS="git git-lfs gh"
 ARG SHELL_TOOLS="zsh tmux fzf ripgrep fd-find jq direnv zoxide bat shellcheck"
+ARG CONTAINER_TOOLS="podman"
 ARG GO_TOOLS="golang"
 ARG RUST_TOOLS="rustup"
 ARG PYTHON_TOOLS="python3 pipx"
@@ -25,39 +26,66 @@ RUN apt-get update && apt-get install -y \
       $SSH_TOOLS \
       $GIT_TOOLS \
       $SHELL_TOOLS \
+      $CONTAINER_TOOLS \
       $GO_TOOLS \
       $RUST_TOOLS \
       $PYTHON_TOOLS \
       $LUA_TOOLS
 
-# Set locale to en utf8
+# Generate locales and set to to en_US.UTF-8
 RUN sed -i '/en_US.UTF-8/s/^# //' /etc/locale.gen && locale-gen
-ENV LANG=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
+
+# set global environment variables for all users on container
+RUN cat <<EOF >> /etc/environment
+LANG=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+TEALDEER_CACHE_DIR=/usr/local/share/tealdeer
+EOF
 
 # Populate man page database
 RUN mandb
 
-# Install and Populate tealdeer cache (tldr cli app)
-RUN curl -fsSL https://github.com/tealdeer-rs/tealdeer/releases/latest/download/tealdeer-linux-aarch64-musl \
-  -o /usr/local/bin/tldr \
-  && chmod +x /usr/local/bin/tldr \
-  && TEALDEER_CACHE_DIR=/usr/local/share/tealdeer tldr --update \
-  && chmod -R a+rwX /usr/local/share/tealdeer
+# Manually install binaries where we want the latest version or they aren't in the debian package repos
+# Change install urls based on target platform
+RUN ARCH=$(uname -m) && \
+    case "$ARCH" in \
+        x86_64) \
+            TEAL_ARCH=x86_64; \
+            TS_ARCH=x64; \
+            NVIM_ARCH=x86_64 \
+        ;; \
+        aarch64) \
+            TEAL_ARCH=aarch64; \
+            TS_ARCH=arm64; \
+            NVIM_ARCH=arm64 \
+        ;; \
+        *) \
+            echo "Unsupported architecture: $ARCH"; \
+            exit 1 \
+        ;; \
+    esac && \
+    \
+    # ---- tealdeer ---- \
+    curl -fsSL \
+      https://github.com/tealdeer-rs/tealdeer/releases/latest/download/tealdeer-linux-${TEAL_ARCH}-musl \
+      -o /usr/local/bin/tldr && \
+    chmod +x /usr/local/bin/tldr && \
+    TEALDEER_CACHE_DIR=/usr/local/share/tealdeer tldr --update && \
+    chmod -R a+rwX /usr/local/share/tealdeer && \
+    \
+    # ---- tree-sitter ---- \
+    curl -fsSL \
+      https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-${TS_ARCH}.gz \
+      | gunzip > /usr/local/bin/tree-sitter && \
+    chmod +x /usr/local/bin/tree-sitter && \
+    \
+    # ---- neovim ---- \
+    curl -fsSL \
+      https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${NVIM_ARCH}.tar.gz \
+      | tar -C /opt -xz && \
+    ln -s /opt/nvim-linux-${NVIM_ARCH}/bin/nvim /usr/local/bin/nvim
 
-ENV TEALDEER_CACHE_DIR=/usr/local/share/tealdeer
-
-# install treesitter-cli (used by neovim)
-RUN curl -fsSL https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-arm64.gz \
-  | gunzip > /usr/local/bin/tree-sitter \
-  && chmod +x /usr/local/bin/tree-sitter
-
-# install latest version of neovim
-RUN curl -fsSL https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz \
-  | tar -C /opt -xz \
-  && ln -s /opt/nvim-linux-arm64/bin/nvim /usr/local/bin/nvim
-
-# Configure sshd: key-only auth, no root login
+# Configure ssh server: key-only auth, no root login
 RUN <<EOF cat > /etc/ssh/sshd_config.d/00-container.conf
 Port 22
 PermitRootLogin no
@@ -67,12 +95,11 @@ X11Forwarding no
 AllowUsers ${USERNAME}
 EOF
 
-# Entrypoint starts sshd then exec's the CMD
+# Entrypoint starts sshd in foreground mode to keep the instance running as long as ssh server is running
 RUN <<'EOF' cat > /usr/local/bin/entrypoint.sh
 #!/bin/sh
 sudo mkdir -p /run/sshd
-sudo /usr/sbin/sshd
-exec "$@"
+sudo /usr/sbin/sshd -D
 EOF
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
@@ -87,5 +114,5 @@ WORKDIR /home/$USERNAME
 # Start ssh server on system startup
 ENTRYPOINT ["entrypoint.sh"]
 
-# Default to zsh to be consistent with mac shell
+# Default to zsh shell
 CMD ["/bin/zsh"]
