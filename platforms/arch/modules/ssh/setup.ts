@@ -6,5 +6,5 @@ export default async function setup() {
   await replaceZshenvVar("GNUPGHOME", "$XDG_DATA_HOME/gnupg")
   await replaceZshenvVar("PASSWORD_STORE_DIR", "$XDG_DATA_HOME/password-store")
   await pacman("pass keychain")
-  sharedLinuxSshSetup({ mirrorUserPassword: true })
+  await sharedLinuxSshSetup({ mirrorUserPassword: true })
 }

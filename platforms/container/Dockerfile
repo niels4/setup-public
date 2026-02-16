@@ -113,6 +113,3 @@ WORKDIR /home/$USERNAME
 
 # Start ssh server on system startup
 ENTRYPOINT ["entrypoint.sh"]
-
-# Default to zsh shell
-CMD ["/bin/zsh"]

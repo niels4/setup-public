@@ -1,6 +1,12 @@
 import { join, relative } from "node:path"
 import { brewBundle } from "#mac/mac-util.ts"
-import { devContainerHome, devContainerHomeVar, homedir, platformsDir, zshAutorunDir } from "#shared/src/constants.ts"
+import {
+  devContainerHome,
+  devContainerHomeVar,
+  homedir,
+  platformsDir,
+  zshAutorunDir,
+} from "#shared/src/constants.ts"
 import { copy_rf, ensureSymlink } from "#shared/src/fs.ts"
 import { replaceZshenvVar, shell, shellIsSuccessful } from "#shared/src/util.ts"
 

@@ -20,10 +20,10 @@ set -euo pipefail
 # This script will setup the storage device. (** Warning it will erase entire hard drive! **)
 #
 # To download and run install script:
-# curl https://raw.githubusercontent.com/niels4/setup-public/refs/heads/main/platforms/arch/scripts/arch-install.sh -o /root/install.sh
+# curl -fL https://raw.githubusercontent.com/niels4/setup-public/refs/heads/main/platforms/arch/scripts/arch-install.sh -o /root/install.sh
 #
 # Open the file in a text editor to make any modifications before installing (such as changing hostname, partition sizes, installed packages, etc):
-# nvim /root/install.sh
+# vim /root/install.sh
 #
 # Find the name of your target disk:
 # lsblk -f
@@ -34,7 +34,7 @@ set -euo pipefail
 # Make sure the target disk is not mounted. If any partitions are mounted, the script will exit.
 #
 # Run the script to install on your target disk:
-# bash /root/install.sh /dev/sdb   # replace /dev/sdb with your target disk if different
+# bash /root/install.sh /dev/sda   # replace /dev/sda with your target disk if different
 #
 # The script will prompt to create a user with a password
 #
@@ -42,10 +42,19 @@ set -euo pipefail
 #  reboot
 
 # Once rebooted, login with the newly created username and password
+#
+# Set up your wifi using `nmtui` (networkctl terminual UI):
+# nmtui
+#
+# Choose Activate a Connection
+# Find you wifi network in the list and enter your password to connect
+#
+# Test your connection:
+# ping google.com
+#
 # From your home directory, create a development folder and checkout the repo:
-# mkdir ~/dev
-# git clone https://github.com/niels4/setup-public.git ~/dev/setup
-# ~/dev/setup/setup.sh
+# git clone https://github.com/niels4/setup-public.git ~/setup
+# ~/setup/setup.sh
 
 # because the script uses pacman and pacman requires sudo to install packages, sudo will ask for your password if it needs it
 
@@ -74,10 +83,10 @@ read -rp "About to erase all partitions on $TARGET_DISK. Continue? [y/N] " CONFI
 
 case "$ARCH" in
     aarch64)
-        ROOT_UUID="b921b045-1df0-41c3-af44-4c6f280d3fae"
+        ROOT_GPT_GUID="b921b045-1df0-41c3-af44-4c6f280d3fae" # GPT GUID for Linux root aarch64
         ;;
     x86_64)
-        ROOT_UUID="2c7357ed-ebd2-46d9-aec1-23d437ec2bf5"
+        ROOT_GPT_GUID="2c7357ed-ebd2-46d9-aec1-23d437ec2bf5" # GPT GUID for Linux root 86x_64
         ;;
     *)
         echo "Unsupported platform: $ARCH" >&2
@@ -101,7 +110,7 @@ sfdisk "$TARGET_DISK" << EOF
 label: gpt
 size=512M, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B
 size=8G, type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F
-type=$ROOT_UUID
+type=$ROOT_GPT_GUID
 EOF
 
 # format partitions:
@@ -130,6 +139,8 @@ mount --mkdir "$EFI_PART" /mnt/boot
 # enable swap:
 swapon "$SWAP_PART"
 
+mkdir -p /mnt/etc
+
 # Tell system how to mount partitions on boot:
 genfstab -U /mnt > /mnt/etc/fstab
 
@@ -145,6 +156,43 @@ cp /etc/vconsole.conf /mnt/etc/vconsole.conf
 
 # set hostname
 echo "$HOSTNAME" > /mnt/etc/hostname
+
+# prompt for initial user info
+
+is_valid_username() {
+  local u="$1"
+  # must not be empty, max 32 chars, starts with letter or _, contains only letters, digits, _ or -
+  if [[ "$u" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]]; then
+    return 0  # valid
+  else
+    return 1  # invalid
+  fi
+}
+
+# try again forever until user enters non empty username
+while true; do
+  read -r -p "Enter initial user name: " username
+  if is_valid_username "$username"; then
+    break
+  else
+    echo "Invalid username. Must start with a letter or _, only use lowercase letters, digits, _ or -, max 32 chars."
+  fi
+done
+
+# try again forever until user is able to enter 2 matching passwords
+while true; do
+  read -s -rp "Enter initial password for $username: " password
+  echo
+  read -s -rp "Re-enter Password: " password2
+  echo
+
+  if [[ "$password" == "$password2" ]]; then
+    echo "Passwords match."
+    break
+  else
+    echo "Passwords do not match. Please try again."
+  fi
+done
 
 # install packages:
 
@@ -164,6 +212,7 @@ pacstrap -K /mnt networkmanager openssh
 
 # The following function has to run within a chroot context
 arch_chroot_setup() {
+  set -euo pipefail
   hwclock --systohc
 
   locale-gen
@@ -184,12 +233,12 @@ arch_chroot_setup() {
   if [[ "$ARCH" == "aarch64" ]]; then
     pacman-key --populate archlinuxarm
   else
-      pacman-key --populate archlinux
+    pacman-key --populate archlinux
   fi
 
   # install bootloader
 
-  bootctl install
+  bootctl install 2>/dev/null
 
   ROOT_PART_UUID=$(blkid -s UUID -o value -c /dev/null "$ROOT_PART")
 
@@ -230,23 +279,8 @@ EOF
   chmod 440 /etc/sudoers.d/enable_wheel
 
   # create initial user
-  echo "Creating initial user..."
-  read -p -r "Enter initial user name: " username
+  echo "Creating initial user '$username'"
 
-  # try again forever until user is able to enter 2 matching passwords
-  while true; do
-    read -s -p -r "Enter initial user password: " password
-    echo
-    read -s -p -r "Re-enter Password: " password2
-    echo
-
-    if [[ "$password" == "$password2" ]]; then
-      echo "Passwords match."
-      break
-    else
-      echo "Passwords do not match. Please try again."
-    fi
-  done
 
   useradd -m -G wheel -s /bin/zsh "$username"
 
@@ -261,10 +295,16 @@ EOF
   touch "/home/$username/.ssh/authorized_keys"
   chown "$username:$username" "/home/$username/.ssh/authorized_keys"
   chmod 600 "/home/$username/.ssh/authorized_keys"
+
+  echo "Install script completed successfully."
 }
 
 # export the function so we can call it with arch-chroot
 export -f arch_chroot_setup
 
 # run the function in arch-chroot context
+export ARCH
+export username
+export password
+export ROOT_PART
 arch-chroot /mnt /bin/bash -c "arch_chroot_setup"

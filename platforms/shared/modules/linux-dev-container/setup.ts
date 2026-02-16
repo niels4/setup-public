@@ -1,12 +1,19 @@
 import { join, relative } from "node:path"
-import { devDir, homedir, zshAutorunDir } from "#shared/src/constants.ts"
+import {
+  devContainerHome,
+  devContainerHomeVar,
+  homedir,
+  platformsDir,
+  zshAutorunDir,
+} from "#shared/src/constants.ts"
 import { copy_rf, ensureSymlink } from "#shared/src/fs.ts"
+import { replaceZshenvVar } from "#shared/src/util.ts"
 
 const __dirname = import.meta.dirname
 
-const setupDockerFile = join(__dirname, "Dockerfile")
-const dockerFileSrc = relative(devDir, setupDockerFile) // use relative path here so that the symlink works both in host and container
-const containerDockerFile = join(devDir, "Dockerfile")
+const setupDockerFile = join(platformsDir, "container", "Dockerfile") // use the Dockerfile from the dev-container directory
+const dockerFileSrc = relative(devContainerHome, setupDockerFile) // use relative path here so that the symlink works both in host and container
+const containerDockerFile = join(devContainerHome, "Dockerfile")
 
 const dockerFileLink = {
   src: dockerFileSrc,
@@ -25,10 +32,11 @@ const sshConfigLink = {
 
 const authorizedKeysCopy = {
   src: join(homedir, ".ssh", "id_mykey.pub"),
-  dst: join(devDir, ".ssh", "authorized_keys"),
+  dst: join(devContainerHome, ".ssh", "authorized_keys"),
 }
 
 export default async function setup() {
+  await replaceZshenvVar(devContainerHomeVar, devContainerHome)
   await ensureSymlink(zshrcLink)
   await ensureSymlink(dockerFileLink)
   await ensureSymlink(sshConfigLink)
