@@ -116,5 +116,5 @@ export default async function setup(options: LinuxSshSetupOptions = {}) {
   await initPass()
   await initSshKey()
 
-  await shell('rm -rf ~/.gnupg') // clean up the extra directory that mysteriously keeps showing up in my home dir
+  await shell("rm -rf ~/.gnupg") // clean up the extra directory that mysteriously keeps showing up in my home dir
 }

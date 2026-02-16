@@ -5,7 +5,6 @@ import { ensureSymlink } from "#shared/src/fs.ts"
 
 const __dirname = import.meta.dirname
 
-
 const devShellZshLink = {
   src: join(__dirname, "zshrc.d", "container-shell.sh"),
   dst: join(zshAutorunDir, "container-shell.sh"),
