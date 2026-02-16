@@ -1,10 +1,9 @@
-DEV_CONTAINER_HOME="${DEV_DIR:-$HOME/dev}" # default to mounting ~/dev as the home directory of the container
+DEV_CONTAINER_HOME="${DEV_CONTAINER_HOME:-$HOME/containers/dev}" # default to mounting ~/containers/dev as the home directory of the container
 CONTAINER_USER=$(whoami) # container user matches host user
 CONTAINER_TAG=dev-container
 CONTAINER_NAME=dev
 DEV_CONTAINER_CPUS=7
 DEV_CONTAINER_MEMORY=12g
-export DEV_CONTAINER_IP
 
 
 container-ensure() {
@@ -35,11 +34,11 @@ container-start() {
       --name "$CONTAINER_NAME" \
       --cpus "$DEV_CONTAINER_CPUS" \
       --memory "$DEV_CONTAINER_MEMORY" \
+      -p 2222:22 \
       -v "$DEV_CONTAINER_HOME":"/home/$CONTAINER_USER" \
-      "$CONTAINER_TAG" \
-      sleep infinity
+      -v "$SETUP_DIR":"/home/$CONTAINER_USER/setup" \
+      "$CONTAINER_TAG"
   fi
-  DEV_CONTAINER_IP=$(container-ip)
 
   # container exec -it "$CONTAINER_NAME" /bin/zsh # use this to launch an interactive shell without using ssh
  

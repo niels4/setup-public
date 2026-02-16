@@ -2,8 +2,6 @@ import { join } from "node:path"
 import {
   configHome,
   defaultNpmPackagesFile,
-  devDir,
-  devDirVar,
   setupDirVar,
   setupRoot,
   sharedDir,
@@ -39,7 +37,6 @@ export default async function setup() {
   await ensureSymlink(miseConfigLink)
   await addLineToZshenv(sourceBaseVars)
   await replaceZshenvVar(setupDirVar, setupRoot)
-  await replaceZshenvVar(devDirVar, devDir)
 
   if (!(await shellIsSuccessful("cargo --version"))) {
     if (await shellIsSuccessful("which rustup-init")) {
