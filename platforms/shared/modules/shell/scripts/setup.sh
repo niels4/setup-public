@@ -13,7 +13,7 @@ SETUP_DIR=${SETUP_DIR:-~/setup}
 
 if ! pushd "$SETUP_DIR" >/dev/null 2>&1; then
   echo "ERROR: Directory ${SETUP_DIR} does not exist. Please check your SETUP_DIR variable (usually set in ~/.zshenv) and make sure your setup repo is checked out at that location."
-    exit 1
+  exit 1
 fi
 
 # make sure git repo is up to date
@@ -30,19 +30,23 @@ if [ -d .git ]; then
   BASE=$(git merge-base @ "$UPSTREAM")
 
   if [ $LOCAL = $REMOTE ]; then
-      echo "Branch Up-to-date"
+    echo "Branch Up-to-date"
   elif [ $LOCAL = $BASE ]; then
-      echo "Need to pull, branch is behind"
-      git pull
+    echo "Need to pull, branch is behind"
+    git pull
   elif [ $REMOTE = $BASE ]; then
-      echo "Need to push, branch is ahead"
-      git push
+    echo "Need to push, branch is ahead"
+    git push
   else
-      echo "Branch diverged from remote!"
+    echo "Branch diverged from remote!"
   fi
 
 fi
 
 ./setup.sh
+
+if command -v rzsh > /dev/null; then
+  rzsh # refresh zsh config if we are using zsh
+fi
 
 popd
