@@ -21,6 +21,8 @@ cross="✗"
 alias print-public-key="cat ${ssh_public_key_file}"
 
 unlock-password-store() {
+  # clean stale gpg-agent sockets (virtiofs can leave broken socket files)
+  rm -f "$GNUPGHOME"/S.gpg-agent* "$GNUPGHOME"/S.dirmngr 2>/dev/null
   # create a dummy value to retrieve so that we trigger the gpg unlock TUI to show up
   dummy_key="pass/dummy-unlock-value"
   pass insert -m -f "$dummy_key" <<< "unlock"
@@ -37,6 +39,7 @@ unlock-password-store() {
 
 lock-password-store() {
   gpgconf --kill gpg-agent
+  rm -f "$GNUPGHOME"/S.gpg-agent* "$GNUPGHOME"/S.dirmngr 2>/dev/null
   echo -e "${green}${bold}${checkmar} Keyring locked ${checkmark}${reset}"
 }
 
