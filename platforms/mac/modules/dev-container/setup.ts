@@ -1,4 +1,4 @@
-import { join, relative } from "node:path"
+import { join } from "node:path"
 import { brewBundle } from "#mac/mac-util.ts"
 import {
   devContainerHome,
@@ -12,13 +12,16 @@ import { replaceZshenvVar, shell, shellIsSuccessful } from "#shared/src/util.ts"
 
 const __dirname = import.meta.dirname
 
-const setupDockerFile = join(platformsDir, "container", "Dockerfile") // use the Dockerfile from the dev-container directory
-const dockerFileSrc = relative(devContainerHome, setupDockerFile) // use relative path here so that the symlink works both in host and container
-const containerDockerFile = join(devContainerHome, "Dockerfile")
+// reference the relative symlink this way so it works in both the host and the container
+const dockerfileLink = {
+  src: "./setup/platforms/container/Dockerfile",
+  dst: join(devContainerHome, "Dockerfile"),
+}
 
-const dockerFileLink = {
-  src: dockerFileSrc,
-  dst: containerDockerFile,
+// symlink works in host, gets replaced by actual setup dir when container is run
+const setupDirLink = {
+  src: join(platformsDir, 'container', 'Dockerfile'),
+  dst: join(devContainerHome, "setup", "platforms", "container", "Dockerfile"),
 }
 
 const zshrcLink = {
@@ -37,11 +40,12 @@ const authorizedKeysCopy = {
 }
 
 export default async function setup() {
-  await replaceZshenvVar(devContainerHomeVar, devContainerHome)
   await brewBundle(import.meta.dirname)
+  await replaceZshenvVar(devContainerHomeVar, devContainerHome)
   await ensureSymlink(zshrcLink)
-  await ensureSymlink(dockerFileLink)
   await ensureSymlink(sshConfigLink)
+  await ensureSymlink(dockerfileLink)
+  await ensureSymlink(setupDirLink)
   await copy_rf(authorizedKeysCopy)
   // install rosetta if its not already installed
   if (!(await shellIsSuccessful("pgrep -q oahd"))) {
