@@ -1,46 +1,43 @@
-# load zinit first
-source "${ZINIT_HOME}/zinit.zsh"
+source "${ZDOTDIR}/zsh-base.sh"
+source "${ZDOTDIR}/completions.sh"
+source "${ZDOTDIR}/plugins.sh"
+source "${ZDOTDIR}/tools.sh"
 
 # aliases
 
-# alias rzsh defined in ./zshrc.d/reload_all_zsh.sh
-
-# run setup
-alias setup="~/s/setup.sh; rzsh"
-
-# tmux shortcuts
+# dev setup functions
+alias setup="~/s/setup.sh"
 alias webdev="~/s/webdev"
 alias shelldev="~/s/shelldev"
 
-# quickly edit zsh config
-alias ezsh="nvim $ZDOTDIR/.zshrc"
-
-# install default npm globals for current version of nodejs
+# install all default globals for current version of node
 alias npm-globals='xargs -r npm install -g < "${MISE_NODE_DEFAULT_PACKAGES_FILE}"'
 
-# print gist by name
-# example: print-gist niels4 setup-public-github.sh
-alias print-gist="~/s/print-gist.sh"
+# quickly edit zshrc file
+alias ezsh="nvim $ZDOTDIR/.zshrc"
 
-# eval gist by name
-# example: eval-gist niels4 setup-public-github.sh
+# functions for working with github gists
+alias print-gist="~/s/print-gist.sh"
 alias eval-gist="bash -c \"\$(~/s/print-gist.sh)\""
 
-# other aliases
-alias ls='ls --color'
+# show colors every time we use ls
+alias ls='ls --color=auto'
 alias l='ls -lah'
+
+# test our ssh authorization with github
 alias github-test-ssh='ssh -T git@github.com'
+
+# compinit loads cached completions, use this alias when adding or updating completions
+alias refresh-completions-cache='rm -f ${ZDOTDIR}/.zcompdump && exec zsh'
 
 # keybindings
 bindkey -v
-bindkey '^[[Z' reverse-menu-complete
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
+bindkey '^[[Z' reverse-menu-complete
 bindkey '^y' autosuggest-accept
 
-# source all files in autorun dir
+# source additional config
 for file in ${ZDOTDIR}/zshrc.d/*.sh; do
   source "$file"
 done
-
-eval "$(mise activate zsh --shims)"

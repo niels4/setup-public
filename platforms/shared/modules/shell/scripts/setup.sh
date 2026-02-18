@@ -45,8 +45,8 @@ fi
 
 ./setup.sh
 
-if command -v rzsh > /dev/null; then
-  rzsh # refresh zsh config if we are using zsh
-fi
+# if command -v rzsh > /dev/null; then
+#   rzsh # refresh zsh config if we are using zsh
+# fi
 
 popd
