@@ -10,6 +10,10 @@ if [ "$(uname)" = "Darwin" ]; then
   echo "Platform is mac"
   "${setup_dir}/platforms/mac/setup.sh"
 
+elif [ -f /etc/os-release ] && grep -iq "omarchy" /etc/os-release; then
+  echo "Platform is omarchy"
+  "${setup_dir}/platforms/omarchy/setup.sh"
+
 elif pacman -h > /dev/null 2>&1; then
   echo "Platform is arch"
   sudo pacman -Sy --needed --noconfirm zsh
