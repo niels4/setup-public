@@ -39,6 +39,7 @@ return {
           luasnip.filetype_extend('javascriptreact', { 'javascript' })
           luasnip.filetype_extend('typescript', { 'javascript' })
           luasnip.filetype_extend('typescriptreact', { 'typescript', 'javascript', 'javascriptreact' })
+          luasnip.filetype_extend('zsh', { 'sh' })
         end,
       },
       'folke/lazydev.nvim',

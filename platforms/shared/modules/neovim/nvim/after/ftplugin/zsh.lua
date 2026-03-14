@@ -1,2 +1,2 @@
-vim.bo.expandtab = false
-vim.bo.tabstop = 4
+local ftplugin = require 'user.util.ftplugin'
+ftplugin.extend 'sh'

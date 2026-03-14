@@ -1,5 +1,5 @@
 clean-nvim-data() {
-  rm -rf ~/.local/share/nvim
-  rm -rf ~/.local/state/nvim
-  rm ~/.config/nvim/lazy-lock.json
+  rm -rf "$XDG_DATA_HOME/nvim"
+  rm -rf "$XDG_STATE_HOME/nvim"
+  rm "$XDG_CONFIG_HOME/nvim/lazy-lock.json"
 }

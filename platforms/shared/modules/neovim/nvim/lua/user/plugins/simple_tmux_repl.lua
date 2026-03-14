@@ -4,6 +4,7 @@ local repl_window = 'repl'
 local shell_window = 'shell'
 
 return {
+  name = 'simple_tmux_repl',
   dir = local_plugins_dir .. 'simple_tmux_repl',
   config = function()
     local tmux_repl = require 'simple_tmux_repl'

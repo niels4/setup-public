@@ -1,2 +1,2 @@
-vim.opt.number = false
-vim.opt.wrap = true
+vim.opt_local.number = false
+vim.opt_local.wrap = true

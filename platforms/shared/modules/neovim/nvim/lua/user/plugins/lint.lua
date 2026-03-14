@@ -10,7 +10,7 @@ return {
       local lint = require 'lint'
 
       lint.linters_by_ft = {
-        markdown = { 'markdownlint' },
+        -- markdown = { 'markdownlint' }, -- this is too annoying to have on by default
         go = { 'staticcheck' },
         rust = { 'clippy' },
         swift = { 'swiftlint' },

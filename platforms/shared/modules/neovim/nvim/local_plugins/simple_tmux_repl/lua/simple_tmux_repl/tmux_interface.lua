@@ -37,13 +37,12 @@ local break_pane = function(target_window)
 end
 
 local send_text = function(target, text)
-  if #text == 0 then
-    return
+  if #text > 0 then
+    local escapedText = escape_shell_chars(text)
+    local cmd1 = 'tmux send-keys -t ' .. target .. ' "' .. escapedText .. '"'
+    shell(cmd1)
   end
-  local escapedText = escape_shell_chars(text)
-  local cmd1 = 'tmux send-keys -t ' .. target .. ' "' .. escapedText .. '"'
   local cmd2 = 'tmux send-keys -t ' .. target .. ' Enter'
-  shell(cmd1)
   shell(cmd2)
 end
 
