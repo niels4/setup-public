@@ -11,7 +11,7 @@ const devMiscZshConfigLink = {
 }
 
 export default async function setup() {
-  await npm("bash-language-server yaml-language-server")
+  await npm("bash-language-server yaml-language-server concurrently")
   await shell("cargo install taplo-cli")
   await ensureSymlink(devMiscZshConfigLink) // setup direnv
 }

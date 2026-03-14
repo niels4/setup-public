@@ -5,7 +5,7 @@ import { bold, checkmark, green, platformsDir, red, reset, setupEnvVar, setupMod
 const getImportPath = (platform: string, moduleName: string) =>
   join(platformsDir, platform, "modules", moduleName, "setup.ts")
 
-export type SupportedPlatform = "arch" | "mac" | "container"
+export type SupportedPlatform = "arch" | "mac" | "dev-container"
 
 export type DevEnvironments = {
   default: string[] // default dev environment required
@@ -27,14 +27,14 @@ export const runSetup = async ({ platform, devEnvironments }: RunSetupArgs) => {
     process.exit(1)
   }
 
-  console.log(`\n${green}Runnning setup for ${bold}${setupEnv}${reset}\n`)
+  console.log(`\n${green}Running setup for ${bold}${setupEnv}${reset}\n`)
   for (const moduleName of modules) {
-    const seperatorIndex = moduleName.indexOf(":")
-    const importPlatform = seperatorIndex < 0 ? platform : moduleName.substring(0, seperatorIndex)
-    const importModule = seperatorIndex < 0 ? moduleName : moduleName.substring(seperatorIndex + 1)
+    const separatorIndex = moduleName.indexOf(":")
+    const importPlatform = separatorIndex < 0 ? platform : moduleName.substring(0, separatorIndex)
+    const importModule = separatorIndex < 0 ? moduleName : moduleName.substring(separatorIndex + 1)
     const { default: setupFunction } = await import(getImportPath(importPlatform, importModule))
     console.log(`\n${green}Starting Module ${bold}${moduleName}${reset}\n`)
     await setupFunction()
-    console.log(`\n${green}${checkmark} Finshed Module ${bold}${moduleName}${reset}\n`)
+    console.log(`\n${green}${checkmark} Finished Module ${bold}${moduleName}${reset}\n`)
   }
 }

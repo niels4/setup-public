@@ -6,20 +6,18 @@ const platform = "arch"
 // SETUP_MODULE=python setup
 
 const defaultModules = [
-  "prereqs",
+  "shared:prereqs",
   "ssh",
-  "shell",
-  "shell-tools",
-  "git",
-  "docs",
-  "neovim",
+  "shared:shell",
   // can reference shared modules directly with "shared:" prefix
+  "shared:git",
+  "shared:neovim",
   "shared:webdev",
-  "lua",
+  "shared:lua",
   "shared:go",
-  "dev-misc",
-  "python",
-  "dev-container",
+  "shared:dev-misc",
+  "shared:python",
+  "shared:dev-container",
 ]
 
 // $SETUP_ENV var determines which set of modules is run
@@ -36,10 +34,7 @@ const devEnvironments: DevEnvironments = {
   ],
 
   // SETUP_ENV=minimal setup
-  minimal: ["prereqs", "ssh", "shell", "shell-tools", "git", "docs", "neovim"],
+  minimal: ["shared:prereqs", "ssh", "shared:shell", "shared:git", "shared:neovim"],
 }
 
 await runSetup({ platform, devEnvironments })
-
-// modules can be installed one at a time by setting the SETUP_MODULE env variable
-// SETUP_MODULE=swift setup

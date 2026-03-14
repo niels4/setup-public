@@ -94,8 +94,8 @@ describe("shared fs", () => {
     describe("when file already exists", () => {
       const existingFile = join(fixturesDir, "ensure-file-existing")
 
-      beforeAll(() => {
-        createFile(existingFile)
+      beforeAll(async () => {
+        await createFile(existingFile)
       })
 
       it("should do nothing", async () => {

@@ -3,9 +3,9 @@
 # set SSH_AUTH_SOCK and SSH_AGENT_PID using keychain
 mkdir -p "${XDG_STATE_HOME}/keychain"
 chmod -R go-rwx "${XDG_STATE_HOME}/keychain"
-eval $(keychain --quiet --dir "${XDG_STATE_HOME}/keychain" --eval)
+eval "$(keychain --quiet --dir "${XDG_STATE_HOME}/keychain" --eval)"
 
-gpg_pass_key=$(cat $PASSWORD_STORE_DIR/.gpg-id)
+gpg_pass_key=$(cat "$PASSWORD_STORE_DIR/.gpg-id")
 ssh_private_key_file="$HOME/.ssh/id_mykey"
 ssh_public_key_file="${ssh_private_key_file}.pub"
 
@@ -40,7 +40,7 @@ unlock-password-store() {
 lock-password-store() {
   gpgconf --kill gpg-agent
   rm -f "$GNUPGHOME"/S.gpg-agent* "$GNUPGHOME"/S.dirmngr 2>/dev/null
-  echo -e "${green}${bold}${checkmar} Keyring locked ${checkmark}${reset}"
+  echo -e "${green}${bold}${checkmark} Keyring locked ${checkmark}${reset}"
 }
 
 # uses gpg-agent TUI to enter gpg passphrase (defaults to same as user login password)

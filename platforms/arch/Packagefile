@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+# Package categories
+BASE="base linux linux-firmware"
+CORE="coreutils expect ripgrep rsync sudo unzip which base-devel"
+NETWORK="networkmanager openssh"
+SHELL_TOOLS="bat direnv fd fzf jq less tmux tree zoxide zsh"
+SSH_TOOLS="keychain pass"
+GIT_TOOLS="git gh git-lfs lazygit"
+DOCS="arch-wiki-docs man tealdeer wikiman"
+EDITOR="neovim tree-sitter-cli vi"
+CONTAINER_TOOLS="podman"
+PYTHON_TOOLS="python python-pipx"
+RUST_TOOLS="rustup"
+GO_TOOLS="go"
+LUA_TOOLS="luajit"
+
+export PACMAN_PACKAGES="$BASE \
+  $CORE \
+  $NETWORK \
+  $SHELL_TOOLS \
+  $SSH_TOOLS \
+  $GIT_TOOLS \
+  $DOCS \
+  $EDITOR \
+  $CONTAINER_TOOLS \
+  $PYTHON_TOOLS \
+  $RUST_TOOLS \
+  $GO_TOOLS \
+  $LUA_TOOLS"
+
+export AUR_PACKAGES="shellcheck-bin"

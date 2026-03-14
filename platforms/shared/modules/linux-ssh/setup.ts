@@ -30,7 +30,7 @@ const gpgKeyId = `${username}@${host}`
 
 const passStoreDir = join(dataHome, "password-store")
 const passStoreInitFile = join(passStoreDir, ".gpg-id")
-const passStoreShhKey = "ssh/passphrase"
+const passStoreSshKey = "ssh/passphrase"
 
 const sshConfigLink = {
   src: join(__dirname, "config"),
@@ -82,7 +82,7 @@ const initSshKey = async () => {
   }
   const passphrase = await generatePassphrase()
 
-  await savePassSecret(passStoreShhKey, passphrase)
+  await savePassSecret(passStoreSshKey, passphrase)
 
   const keygenScript = `
 spawn ssh-keygen -t ed25519 -C "${username}@${host}"

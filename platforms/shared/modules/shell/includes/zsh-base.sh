@@ -28,3 +28,11 @@ setopt HIST_NO_STORE               # don't save history command itself
 
 # navigation
 setopt auto_cd
+
+TRAPUSR1() {
+  if [[ -o INTERACTIVE ]]; then
+     {echo; echo "execute a new shell instance" } 1>&2
+     source ~/.zshenv
+     exec /bin/zsh
+  fi
+}

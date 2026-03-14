@@ -1,15 +1,12 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
 session=$1
 
-tmux has-session -t $session
-
-if [ $? == 0 ]; then
+if tmux has-session -t "$session" 2>/dev/null; then
   echo "reattaching to ${session}"
   tmux attach -t $session
   exit 0
 fi
-
 echo "starting ${session}"
 
 tmux new-session -d -s $session -n "editor"

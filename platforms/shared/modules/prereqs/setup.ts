@@ -1,13 +1,14 @@
 import { join } from "node:path"
 import {
   configHome,
+  dataHome,
   defaultNpmPackagesFile,
   setupDirVar,
   setupRoot,
   sharedDir,
   zdotDir,
 } from "#shared/src/constants.ts"
-import { ensureSymlink } from "#shared/src/fs.ts"
+import { ensureDir, ensureSymlink } from "#shared/src/fs.ts"
 import { addLineToZshenv, replaceZshenvVar, shell, shellIsSuccessful } from "#shared/src/util.ts"
 
 const __dirname = import.meta.dirname
@@ -32,8 +33,9 @@ const baseVarsLink = {
 
 // Add required utilities and environment variables that all scripts can rely on
 export default async function setup() {
-  await ensureSymlink(defaultNpmPackagesLink)
   await ensureSymlink(baseVarsLink)
+  await ensureDir(join(dataHome, "node"))
+  await ensureSymlink(defaultNpmPackagesLink)
   await ensureSymlink(miseConfigLink)
   await addLineToZshenv(sourceBaseVars)
   await replaceZshenvVar(setupDirVar, setupRoot)

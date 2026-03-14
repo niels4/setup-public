@@ -1,0 +1,45 @@
+# core
+brew "coreutils"
+brew "rsync"
+brew "unzip"
+
+# shell tools
+brew "ripgrep"
+brew "fd"
+brew "jq"
+brew "fzf"
+brew "tree"
+brew "zoxide"
+brew "bash" # we use zsh, but we keep latest version of bash handy
+
+# git
+brew "git"
+brew "gh"
+brew "git-lfs"
+brew "lazygit" # TUI
+cask "fork"    # GUI
+
+# editor
+brew "neovim"
+brew "tree-sitter-cli"
+
+# dev tools
+brew "tmux"
+brew "direnv"
+brew "tealdeer"
+brew "protobuf"
+brew "shellcheck"
+
+# terminal
+cask "iterm2"
+cask "font-sauce-code-pro-nerd-font"
+
+# apple container (similar to podman / docker)
+brew "container"
+
+# languages
+brew "rustup"
+brew "go"
+brew "luajit"
+brew "python"
+brew "pipx"

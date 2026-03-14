@@ -8,17 +8,31 @@ const platform = "mac"
 const defaultModules = [
   "prereqs",
   "ssh",
-  "shell",
-  "shell-tools",
-  "git",
-  "neovim",
-  "iterm2",
   // can reference shared modules directly with "shared:" prefix
+  "shared:shell",
+  "shared:git",
+  "shared:neovim",
   "shared:webdev",
-  "lua",
+  "shared:lua",
   "shared:go",
-  "dev-misc",
-  "python",
+  "shared:dev-misc",
+  "shared:python",
+  "iterm2",
+  "dev-container",
+]
+
+const workModules = [
+  "prereqs",
+  "ssh",
+  "shared:shell",
+  "shared:git",
+  "shared:neovim",
+  "shared:webdev",
+  "shared:lua",
+  "shared:go",
+  "shared:dev-misc",
+  "shared:python",
+  "iterm2",
   "dev-container",
 ]
 
@@ -38,7 +52,9 @@ const devEnvironments: DevEnvironments = {
   ],
 
   // SETUP_ENV=minimal setup
-  minimal: ["prereqs", "ssh", "shell", "shell-tools", "git", "neovim"],
+  minimal: ["prereqs", "ssh", "shared:shell", "shared:git", "shared:neovim"],
+
+  work: workModules,
 }
 
 await runSetup({ platform, devEnvironments })

@@ -47,4 +47,4 @@ export FZF_ALT_C_OPTS="
 eval "$(fzf --zsh)"
 
 # mise
-eval "$(mise activate zsh --shims)"
+eval "$(mise activate zsh)"

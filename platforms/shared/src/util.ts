@@ -63,19 +63,19 @@ export const shellIsSuccessful = async (command: string, options?: ShellOptions)
 // uses exact string matching
 export const fileContainsText = async (file: string, text: string) => {
   const escapedText = escapeDoubleQuotes(escapeDollarSigns(text))
-  return shellIsSuccessful(`rg --fixed-strings "${escapedText}" ${file}`, { silent: true })
+  return shellIsSuccessful(`rg --fixed-strings "${escapedText}" "${file}"`, { silent: true })
 }
 
 // uses exact string matching
 export const deleteLinesContainingText = async (file: string, text: string) => {
   const escapedText = escapeDoubleQuotes(escapeDollarSigns(text))
-  return shell(`perl -i -ne 'print unless index($_, "${escapedText}") >= 0' ${file}`)
+  return shell(`perl -i -ne 'print unless index($_, "${escapedText}") >= 0' "${file}"`)
 }
 
 export const addLineToZshenv = async (line: string) => {
   if (!(await fileContainsText(zshenv, line))) {
     const escapedLine = escapeDoubleQuotes(escapeDollarSigns(line))
-    await shell(`echo "${escapedLine}" >> ${zshenv}`)
+    await shell(`echo "${escapedLine}" >> "${zshenv}"`)
   }
 }
 

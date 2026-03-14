@@ -6,3 +6,4 @@ bash-language-server
 yaml-language-server
 @johnnymorganz/stylua-bin
 pyright
+concurrently

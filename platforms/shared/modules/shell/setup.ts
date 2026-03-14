@@ -1,6 +1,7 @@
+import { userInfo } from "node:os"
 import { join } from "node:path"
 import { configHome, dataHome, homedir, zdotDir, zshAutorunDir } from "#shared/src/constants.ts"
-import { checkPathExists, ensureSymlink } from "#shared/src/fs.ts"
+import { checkPathExists, ensureDir, ensureSymlink } from "#shared/src/fs.ts"
 import { shell } from "#shared/src/util.ts"
 
 const __dirname = import.meta.dirname
@@ -28,32 +29,35 @@ const scriptsDirLink = {
   dst: join(homedir, "s"),
 }
 
+const includesDir = join(__dirname, "includes")
+const zshIncludesDir = join(zdotDir, "includes")
+
 const pluginsLink = {
-  src: join(__dirname, "plugins.sh"),
-  dst: join(zdotDir, "plugins.sh"),
+  src: join(includesDir, "plugins.sh"),
+  dst: join(zshIncludesDir, "plugins.sh"),
 }
 
 const completionsLink = {
-  src: join(__dirname, "completions.sh"),
-  dst: join(zdotDir, "completions.sh"),
+  src: join(includesDir, "completions.sh"),
+  dst: join(zshIncludesDir, "completions.sh"),
 }
 
 const zshBaseLink = {
-  src: join(__dirname, "zsh-base.sh"),
-  dst: join(zdotDir, "zsh-base.sh"),
+  src: join(includesDir, "zsh-base.sh"),
+  dst: join(zshIncludesDir, "zsh-base.sh"),
 }
 
 const toolsLink = {
-  src: join(__dirname, "tools.sh"),
-  dst: join(zdotDir, "tools.sh"),
-}
-
-const reloadAllZshConfig = {
-  src: join(__dirname, "zshrc.d", "reload_all_zsh.sh"),
-  dst: join(zshAutorunDir, "reload_all_zsh.sh"),
+  src: join(includesDir, "tools.sh"),
+  dst: join(zshIncludesDir, "tools.sh"),
 }
 
 export default async function setup() {
+  if (userInfo().shell !== "/bin/zsh") {
+    await shell(`chsh -s /bin/zsh`)
+  }
+
+  await ensureDir(zshAutorunDir)
   await ensureSymlink(tmuxConfigLink)
   await ensureSymlink(pluginsLink)
   await ensureSymlink(completionsLink)
@@ -61,7 +65,6 @@ export default async function setup() {
   await ensureSymlink(toolsLink)
   await ensureSymlink(zshrcLink)
   await ensureSymlink(scriptsDirLink)
-  await ensureSymlink(reloadAllZshConfig)
 
   for (const [name, repo] of plugins) {
     const pluginPath = join(zshPluginDir, name)

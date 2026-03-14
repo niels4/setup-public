@@ -1,5 +1,4 @@
 import { join } from "node:path"
-import { brewBundle } from "#mac/mac-util.ts"
 import { homedir } from "#shared/src/constants.ts"
 import { copy_rf } from "#shared/src/fs.ts"
 
@@ -14,6 +13,5 @@ const iterm2ProfilesLink = {
 }
 
 export default async function setup() {
-  await brewBundle(__dirname)
   await copy_rf(iterm2ProfilesLink)
 }

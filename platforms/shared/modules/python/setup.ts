@@ -7,5 +7,5 @@ export default async function setup() {
   await shell("pipx install ruff")
   await shell("pipx install isort")
   await shell("pipx install black")
-  npm("pyright")
+  await npm("pyright")
 }

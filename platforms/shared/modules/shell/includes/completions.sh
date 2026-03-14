@@ -3,12 +3,7 @@
 # zsh-completions: extra community tab completions
 fpath=("${XDG_DATA_HOME}/zsh/plugins/zsh-completions/src" $fpath)
 
-# Make sure our completion colors match our ls colors in both linux and mac
-if (( $+commands[dircolors] )); then
-  eval "$(dircolors -b)"
-else
-  export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:st=34;44"
-fi
+export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43:st=34;44"
 
 # load completions (cached, use refresh-completions-cache alias to add or update completions)
 autoload -Uz compinit && compinit -C

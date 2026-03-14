@@ -1,9 +1,18 @@
-source "${ZDOTDIR}/zsh-base.sh"
-source "${ZDOTDIR}/completions.sh"
-source "${ZDOTDIR}/plugins.sh"
-source "${ZDOTDIR}/tools.sh"
+source "${ZDOTDIR}/includes/zsh-base.sh"
+source "${ZDOTDIR}/includes/completions.sh"
 
-# aliases
+# ** drop in configs ** #
+for file in ${ZDOTDIR}/zshrc.d/*.sh; do
+  source "$file"
+done
+
+source "${ZDOTDIR}/includes/plugins.sh"
+source "${ZDOTDIR}/includes/tools.sh"
+
+# ** aliases ** #
+
+# reload all zsh instances with rzsh
+alias rzsh="killall -USR1 zsh || true; killall -USR1 -- -zsh || true"
 
 # dev setup functions
 alias setup="~/s/setup.sh"
@@ -11,7 +20,7 @@ alias webdev="~/s/webdev"
 alias shelldev="~/s/shelldev"
 
 # install all default globals for current version of node
-alias npm-globals='xargs -r npm install -g < "${MISE_NODE_DEFAULT_PACKAGES_FILE}"'
+alias npm-globals='xargs npm install -g < "${MISE_NODE_DEFAULT_PACKAGES_FILE}"'
 
 # quickly edit zshrc file
 alias ezsh="nvim $ZDOTDIR/.zshrc"
@@ -30,14 +39,10 @@ alias github-test-ssh='ssh -T git@github.com'
 # compinit loads cached completions, use this alias when adding or updating completions
 alias refresh-completions-cache='rm -f ${ZDOTDIR}/.zcompdump && exec zsh'
 
-# keybindings
+# ** keybindings ** #
 bindkey -v
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^y' autosuggest-accept
 
-# source additional config
-for file in ${ZDOTDIR}/zshrc.d/*.sh; do
-  source "$file"
-done

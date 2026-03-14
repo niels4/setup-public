@@ -1,5 +1,0 @@
-# ripgrep installed by prereqs
-# fd installed by shell-tools
-brew "neovim"
-brew "tree-sitter-cli"
-brew "unzip"
