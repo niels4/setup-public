@@ -4,6 +4,8 @@ set -euo pipefail
 container_setup_dir=$(dirname "$(realpath "$0")")
 base_setup_dir="${container_setup_dir}/../.."
 
+. "$base_setup_dir/platforms/shared/base-vars.sh"
+
 # ensure this file exists
 touch ~/.zshenv
 
@@ -22,7 +24,7 @@ mise shell node@"$(cat "${base_setup_dir}"/.node-version)"
   npm install
   node setup.ts
   # Install all your default packages at once
-  xargs -r npm install -g < "${MISE_NODE_DEFAULT_PACKAGES_FILE}"
+  xargs npm install -g < "${MISE_NODE_DEFAULT_PACKAGES_FILE}"
   mise install node@latest # wait until after default-npm-packages-file is created to install latest node
 ) || exit 1 
 

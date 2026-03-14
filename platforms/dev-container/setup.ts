@@ -1,6 +1,6 @@
 import { type DevEnvironments, runSetup } from "#shared/src/runner.ts"
 
-const platform = "container"
+const platform = "dev-container"
 
 // modules can be installed one at a time by setting the SETUP_MODULE env variable
 // SETUP_MODULE=shared:extras setup
@@ -11,6 +11,19 @@ const defaultModules = [
   "shared:linux-ssh",
   "shared:git",
   // setup specific to containers goes in the container modules directory
+  "shell",
+  "shared:neovim",
+  "shared:webdev",
+  "shared:dev-misc",
+  "shared:python",
+  "shared:lua",
+  "shared:go",
+]
+
+const workModules = [
+  "shared:prereqs",
+  "shared:linux-ssh",
+  "shared:git",
   "shell",
   "shared:neovim",
   "shared:webdev",
@@ -35,6 +48,8 @@ const devEnvironments: DevEnvironments = {
 
   // SETUP_ENV=minimal setup
   minimal: ["shared:prereqs", "shared:linux-ssh", "shared:git", "shell", "shared:neovim"],
+
+  work: workModules,
 }
 
 await runSetup({ platform, devEnvironments })

@@ -13,7 +13,7 @@ const devShellZshLink = {
 const tealdeerConfigDir = join(configHome, "tealdeer")
 
 const tealdeerConfigLink = {
-  src: join(__dirname, "tealeer", "config.toml"),
+  src: join(__dirname, "tealdeer", "config.toml"),
   dst: join(tealdeerConfigDir, "config.toml"),
 }
 

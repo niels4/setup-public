@@ -22,8 +22,8 @@ elif pacman -h > /dev/null 2>&1; then
 elif apt-get -h > /dev/null 2>&1; then
   # The only place I use debian is in the container
   # You will need to make this more specific if you use debian or ubuntu as a host OS
-  echo "Platform is container"
-  "${setup_dir}/platforms/container/setup.sh"
+  echo "Platform is dev-container"
+  "${setup_dir}/platforms/dev-container/setup.sh"
 
 else
   echo "Unsupported Platform!"
