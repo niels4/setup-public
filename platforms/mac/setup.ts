@@ -18,22 +18,6 @@ const defaultModules = [
   "shared:dev-misc",
   "shared:python",
   "iterm2",
-  "dev-container",
-]
-
-const workModules = [
-  "prereqs",
-  "ssh",
-  "shared:shell",
-  "shared:git",
-  "shared:neovim",
-  "shared:webdev",
-  "shared:lua",
-  "shared:go",
-  "shared:dev-misc",
-  "shared:python",
-  "iterm2",
-  "dev-container",
 ]
 
 // $SETUP_ENV var determines which set of modules is run
@@ -49,12 +33,12 @@ const devEnvironments: DevEnvironments = {
     "shared:extras",
     // install tools for swift development only as an extra
     "swift",
+    // install apple containers package (docker alternative)
+    "dev-container",
   ],
 
   // SETUP_ENV=minimal setup
   minimal: ["prereqs", "ssh", "shared:shell", "shared:git", "shared:neovim"],
-
-  work: workModules,
 }
 
 await runSetup({ platform, devEnvironments })
