@@ -9,7 +9,7 @@ const __dirname = import.meta.dirname
 
 const homebrewZshConfigLink = {
   src: join(__dirname, "zshrc.d", "homebrew.sh"),
-  dst: join(zshAutorunDir, "homebrew.sh"),
+  dst: join(zshAutorunDir, "_homebrew.sh"),
 }
 
 const homebrewUpdateRate = `43200`
