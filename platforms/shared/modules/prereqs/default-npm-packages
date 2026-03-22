@@ -7,3 +7,4 @@ yaml-language-server
 @johnnymorganz/stylua-bin
 pyright
 concurrently
+websocket-text-relay

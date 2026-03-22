@@ -20,5 +20,5 @@ export default async function setup() {
   await ensureSymlink(nvimZshConfigLink)
   await replaceZshenvVar("EDITOR", "nvim")
   await replaceZshenvVar("MANPAGER", "'nvim +Man!'")
-  await npm("markdownlint-cli")
+  await npm("websocket-text-relay markdownlint-cli")
 }
