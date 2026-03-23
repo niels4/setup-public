@@ -28,7 +28,9 @@ if ! command -v mise >/dev/null 2>&1; then
   curl https://mise.run | sh
 fi
 
+set +u
 eval "$(mise activate zsh)"
+set -u
 
 # install and use version specified in .node-version file to run setup script
 mise shell node@"$(cat "${base_setup_dir}"/.node-version)"

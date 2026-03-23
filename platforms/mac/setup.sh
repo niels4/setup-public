@@ -20,9 +20,10 @@ fi
 
 # install mise for managing nodejs versions
 brew install mise
-eval "$(mise activate zsh)"
 
-echo 'activated'
+set +u
+eval "$(mise activate zsh)"
+set -u
 
 # install and use version specified in .node-version file to run setup script
 mise shell node@"$(cat "${base_setup_dir}"/.node-version)"
